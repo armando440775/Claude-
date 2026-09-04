@@ -1,2 +1,7 @@
 ~$*.xlsx
 __pycache__/
+.treg/
+treg.json
+token.json
+.secret/
+.env
