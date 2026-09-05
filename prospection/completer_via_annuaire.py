@@ -85,7 +85,26 @@ NAF = {
     "47.11F": "Hypermarches",
     "47.52B": "Commerce de detail de materiaux de construction",
     "10.81Z": "Fabrication de sucre",
+    # --- secteur public, scolaire et sanitaire
+    "84.11Z": "Administration publique generale",
+    "84.25C": "Services de secours et de lutte contre l'incendie",
+    "85.20Z": "Enseignement primaire",
+    "85.31Z": "Enseignement secondaire general",
+    "85.32Z": "Enseignement secondaire technique ou professionnel",
+    "85.42Z": "Enseignement superieur",
     "86.10Z": "Activites hospitalieres",
+    "86.90E": "Autres activites para-medicales (dont dialyse)",
+    "87.10A": "Hebergement medicalise pour personnes agees",
+    "87.10B": "Hebergement medicalise pour enfants handicapes",
+    "87.30A": "Hebergement social pour personnes agees",
+    "87.30B": "Hebergement social pour handicapes physiques",
+    "88.10A": "Aide a domicile",
+    "88.10C": "Aide par le travail (ESAT)",
+    "88.99B": "Action sociale sans hebergement n.c.a.",
+    "56.29A": "Restauration collective sous contrat",
+    "38.11Z": "Collecte des dechets non dangereux",
+    "38.21Z": "Traitement et elimination des dechets non dangereux",
+    "35.13Z": "Distribution d'electricite",
 }
 
 MOTS_VIDES = {
@@ -275,6 +294,11 @@ def traiter(chemin_in, chemin_out, forcer=False):
             nom = ws.cell(row=r, column=C_NOM).value
             commune = ws.cell(row=r, column=C_COM).value
             if not nom or str(nom).strip().startswith(("À prospecter", "A prospecter")):
+                continue
+            # Lignes "methode" (ex : "EHPAD du bassin - a lister") : rien a chercher
+            type_structure = str(ws.cell(row=r, column=3).value or "").lower()
+            if "à lister" in type_structure or "à défricher" in type_structure:
+                print("  · %-46s ligne méthode, ignorée" % str(nom)[:46])
                 continue
             manquants = [c for c in (C_SIRET, C_APE, C_LIBAPE, C_EFF, C_DG)
                          if est_vide(ws.cell(row=r, column=c).value)]

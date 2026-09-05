@@ -1,20 +1,33 @@
-# Prospection logistique — bassin Nord-Est de La Réunion
+# Prospection apprentissage — bassin Nord-Est de La Réunion
 
-De Saint-Denis à Sainte-Rose, hauteurs comprises. Cible : entreprises susceptibles de
+De Saint-Denis à Sainte-Rose, hauteurs comprises. Cible : structures susceptibles de
 signer un **contrat d'apprentissage** sur un métier de la logistique (16-25 ans).
 
 ## Ce que contient ce dossier
 
+**Deux fichiers de travail, même structure, même méthode :**
+
 | Fichier | À quoi ça sert |
 |---|---|
-| `Prospection_Logistique_Nord-Est_Reunion.xlsx` | **Votre fichier de travail.** 60 entreprises, 12 onglets. Double-cliquez, c'est tout. |
-| `completer_via_annuaire.py` | Remplit tout seul SIRET / code APE / effectif / dirigeant depuis l'INSEE. |
-| `generer_fichier_prospection.py` | Régénère le classeur à zéro (à n'utiliser que si vous voulez repartir du modèle). |
+| `Prospection_Logistique_Nord-Est_Reunion.xlsx` | **Le privé.** 60 entreprises de la logistique, du transport et de la distribution. |
+| `Prospection_Public_Sante_Nord-Est_Reunion.xlsx` | **Le public et la santé.** 39 structures : communes, CCAS, intercommunalités, Département, Région, lycées, CHU, cliniques, EHPAD. |
 
-⚠️ `generer_fichier_prospection.py` **écrase** le classeur et donc votre suivi de prospection.
-Ne le lancez pas une fois que vous avez commencé à remplir les colonnes « Statut » et « Notes ».
+Double-cliquez, c'est tout. Une seule structure figure dans les deux fichiers — le **GHER**
+à Saint-Benoît : ne passez pas deux appels.
 
-## Les onglets
+**Les outils :**
+
+| Fichier | À quoi ça sert |
+|---|---|
+| `completer_via_annuaire.py` | Remplit tout seul SIRET / code APE / effectif / dirigeant depuis l'INSEE. **Fonctionne sur les deux classeurs.** |
+| `generer_fichier_prospection.py` | Régénère le classeur « privé » à zéro. |
+| `generer_fichier_public_sante.py` | Régénère le classeur « public & santé » à zéro. |
+| `commun_prospection.py` | Briques partagées par les deux générateurs (charte, colonnes, mise en page). Ne s'exécute pas seul. |
+
+⚠️ Les scripts `generer_*` **écrasent** le classeur et donc votre suivi de prospection.
+Ne les lancez pas une fois que vous avez commencé à remplir les colonnes « Statut » et « Notes ».
+
+## Les onglets du fichier « privé »
 
 - **00 Mode d'emploi** — à lire en premier.
 - **01 à 07** — un onglet par commune, dans l'ordre de la route littorale : Saint-Denis,
@@ -24,6 +37,36 @@ Ne le lancez pas une fois que vous avez commencé à remplir les colonnes « Sta
 - **09 Codes APE à cibler** — pour élargir vous-même le fichier depuis l'Annuaire des Entreprises.
 - **10 Script d'appel** — trame d'appel à froid, 5 arguments employeur, réponses aux objections.
 - **11 Sources & mise à jour** — d'où viennent les données.
+
+## Les onglets du fichier « public & santé »
+
+- **00 Mode d'emploi**, puis un onglet par famille : **01** communes et CCAS, **02**
+  intercommunalités (CIREST, CINOR, syndicats), **03** Département / Région / Rectorat /
+  Université / CROUS / SDIS, **04** lycées et collèges, **05** hôpital public (CHU Félix
+  Guyon, GHER), **06** cliniques et santé privée, **07** EHPAD, dialyse et médico-social.
+- **08 Pilotage** — mêmes compteurs automatiques.
+- **09 Apprentissage dans le public** — **l'onglet à lire avant le premier appel** (voir
+  ci-dessous).
+- **10 Script d'appel (public)** — on ne parle pas à une mairie comme à un transporteur.
+- **11 Sources & mise à jour**.
+
+### Le piège du calendrier public
+
+Dans le privé, on prospecte au printemps pour la rentrée. Dans la fonction publique
+**territoriale**, le CNFPT ne finance les frais de formation que si la collectivité s'est
+**recensée** pendant sa campagne annuelle, qui se déroule en début d'année civile (celle de
+2026 était ouverte du 19 janvier au 20 mars). Une collectivité non recensée ne sera pas
+financée, même avec un excellent candidat.
+
+Conséquence : **vos rendez-vous d'octobre à décembre ne servent pas à signer, ils servent à
+faire inscrire la collectivité au recensement de janvier.** Deux autres points à connaître :
+seuls les niveaux 3 à 5 (CAP → BTS) sont financés — vos titres logistique sont dans la bonne
+fourchette — et le métier visé doit figurer sur la liste des métiers en tension du CNFPT :
+**vérifiez-le avant de promettre un financement à un DRH.** Le détail (pièces APF/APC, délais,
+objections) est dans l'onglet 09.
+
+Attention : montants, quotas et dates changent chaque année. Revérifiez sur cnfpt.fr avant
+d'annoncer un chiffre.
 
 ## Remplir automatiquement les SIRET, APE, effectifs et dirigeants
 
@@ -46,8 +89,11 @@ inscription, données INSEE) et complète le fichier à votre place.
 
 ```
 cd <le dossier prospection>
-python3 completer_via_annuaire.py          # Mac
+python3 completer_via_annuaire.py          # Mac — fichier « privé » par défaut
 py completer_via_annuaire.py               # Windows
+
+# pour le fichier public & santé, indiquez-le :
+python3 completer_via_annuaire.py Prospection_Public_Sante_Nord-Est_Reunion.xlsx
 ```
 
 Le script produit :
@@ -68,6 +114,8 @@ même les lignes déjà renseignées.
 - Il signale en toutes lettres les **établissements fermés** selon l'INSEE : vous ne perdez
   plus un appel sur une entreprise qui n'existe plus.
 - Il n'écrase jamais une donnée que vous avez saisie à la main.
+- Il ignore les lignes « à lister » (autres lycées, EHPAD, ESAT…) : ce sont des méthodes de
+  recherche, pas des structures.
 
 ### Ce que le script ne fait pas
 
