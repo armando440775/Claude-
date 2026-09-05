@@ -75,6 +75,7 @@ COLS = [
     ("SIRET (14 chiffres)", 20),
     ("Code APE", 10),
     ("Libellé APE", 32),
+    ("Effectif (tranche INSEE)", 22),
     ("Dirigeant (Nom Prénom)", 24),
     ("Fonction", 16),
     ("Téléphone", 16),
@@ -91,18 +92,18 @@ COLS = [
 
 STATUTS = '"A contacter,Message laissé,RDV pris,Visite faite,Offre déposée,Candidat proposé,Contrat signé,Sans suite"'
 PRIORITES = '"P1,P2,P3"'
-FIABILITES = '"Vérifié,Source annuaire,A vérifier"'
+FIABILITES = '"Vérifié INSEE,Vérifié,Source annuaire,A vérifier"'
 
 # ---------------------------------------------------------------- Donnees
 # Chaque tuple : (raison sociale, segment, adresse, CP, commune, siret, ape,
 #                 libelle_ape, dirigeant, fonction, tel, email, site,
 #                 poste_apprenti, priorite, fiabilite, notes)
 def L(nom, seg, adr, cp, com, poste, prio, fiab, notes,
-      siret=AV, ape=AV, lib_ape=AV, dg=AC, fonc="Dirigeant / DG",
+      siret=AV, ape=AV, lib_ape=AV, eff=AC, dg=AC, fonc="Dirigeant / DG",
       tel=AC, mail=AC, site=AC):
     return dict(nom=nom, seg=seg, adr=adr, cp=cp, com=com, siret=siret, ape=ape,
-                lib_ape=lib_ape, dg=dg, fonc=fonc, tel=tel, mail=mail, site=site,
-                poste=poste, prio=prio, fiab=fiab, notes=notes)
+                lib_ape=lib_ape, eff=eff, dg=dg, fonc=fonc, tel=tel, mail=mail,
+                site=site, poste=poste, prio=prio, fiab=fiab, notes=notes)
 
 P_OPLOG = "Opérateur logistique / Prépa. commandes"
 P_MAGAS = "Magasinier / Gestion des stocks"
@@ -151,6 +152,25 @@ SAINT_DENIS = [
     L("RAVATE PROFESSIONNEL", "Négoce matériaux + plateforme",
       AV, "97400", "Saint-Denis", P_MAGAS, "P1", "A vérifier",
       "Filiale du groupe Ravate (siège Saint-Denis). Gros volumes = magasiniers/caristes."),
+    L("CERP RÉUNION (GROUPE SIPR)", "Répartition pharmaceutique / Dépositaire",
+      AV, "97400", "Saint-Denis", P_OPLOG, "P1", "Source annuaire",
+      "Importateur-grossiste-répartiteur en produits pharmaceutiques. Groupe SIPR "
+      "(CERP-Réunion, MAD-SIPR, Plurimed, Dicophar), 3 sites : Saint-Denis, Sainte-Marie, "
+      "Saint-Pierre. Préparation de commandes sous Bonnes Pratiques de Distribution : "
+      "cadre très formateur, gros volumes quotidiens.",
+      site="https://www.cerp-sipr.com/cerp/"),
+    L("CGF NORD", "Grossiste fruits & légumes / Bio",
+      "91 rue Foch – Zone Foucherolles, Sainte-Clotilde", "97490", "Sainte-Clotilde (Saint-Denis)",
+      P_OPLOG, "P1", "Source annuaire",
+      "Distribution en gros de fruits, légumes et produits bio : préparation de commandes "
+      "quotidienne et gestion du froid. Rotation forte = besoin récurrent de préparateurs."),
+    L("SOMADIS – SOCIÉTÉ MANES DISTRIBUTION", "Commerce de gros / Entrepôt",
+      "76 boulevard du Chaudron", "97490", "Sainte-Clotilde (Saint-Denis)", P_MAGAS, "P2",
+      "Source annuaire", "Commerce de gros sur la zone du Chaudron : réception, stock, expédition."),
+    L("DEMECO CHEUNG DÉMÉNAGEMENTS", "Déménagement / Garde-meuble",
+      AV, "97400", "Saint-Denis", P_MAGAS, "P2", "Source annuaire",
+      "Déménagement local, national et international, garde-meuble et groupage maritime. "
+      "Manutention, inventaire et gestion de stock : bon terrain pour un profil magasinier."),
 ]
 
 SAINTE_MARIE = [
@@ -175,10 +195,41 @@ SAINTE_MARIE = [
     L("DHL INTERNATIONAL RÉUNION", "Messagerie express international",
       "12 rue Hélène Boucher – ZA Saint-Exupéry, zone aéroportuaire", "97438", "Sainte-Marie",
       P_QUAI, "P1", "Source annuaire", "Groupe international : passer par le responsable d'agence ET le service RH DOM."),
-    L("TRANS EXPRESS RÉUNION", "Transport express / Messagerie",
-      AV, "97438", "Sainte-Marie", P_QUAI, "P2", "Source annuaire", ""),
-    L("OCX RÉUNION", "Transport / Logistique",
-      AV, "97438", "Sainte-Marie", P_OPLOG, "P2", "Source annuaire", ""),
+    L("TRANS EXPRESS RÉUNION (TER)", "Affrètement / Organisation de transports",
+      AV, "97438", "Sainte-Marie", P_QUAI, "P1", "Source annuaire",
+      "Affrètement et organisation de transports. Présent à Gillot pour le fret aérien "
+      "et au port pour le fret maritime : deux univers dans la même entreprise."),
+    L("OCX RÉUNION", "Messagerie express internationale",
+      AV, "97438", "Sainte-Marie", P_QUAI, "P1", "Source annuaire",
+      "Cité comme représentant officiel FedEx et TNT à La Réunion : quai, tri, "
+      "documents d'expédition. Confirmer l'agrément lors de l'appel."),
+    L("HOLDTRANS", "Transit / Commission en douane",
+      "Nouvelle aérogare de fret – porte 238", "97438", "Sainte-Marie", P_TRANS, "P1",
+      "Source annuaire",
+      "Déclarants en douane agréés, fret maritime et aérien. Sur la plateforme fret de Gillot."),
+    L("BOLLORÉ LOGISTICS RÉUNION", "Transit international / Logistique contractuelle",
+      "7 rue André Lardy – La Mare", "97438", "Sainte-Marie", P_TRANS, "P1", "Source annuaire",
+      "Groupe international : l'alternance y est une pratique installée. Viser le responsable "
+      "d'agence ET la RH régionale, et déposer l'offre sur leur portail recrutement."),
+    L("SCHENKER FRANCE – agence Réunion", "Transit / Commission de transport",
+      "Zone aérogare de fret – Gillot", "97438", "Sainte-Marie", P_TRANS, "P1", "Source annuaire",
+      "Groupe international présent sur la zone fret. Même méthode que Bolloré : agence + RH."),
+    L("KUEHNE + NAGEL – présence 974", "Transit / Logistique internationale",
+      AV, "97438", "Sainte-Marie", P_TRANS, "P2", "A vérifier",
+      "Présence citée sur la zone aéroportuaire mais NON confirmée : vérifier l'existence "
+      "d'un établissement 974 sur l'Annuaire des Entreprises AVANT tout appel."),
+    L("LEROY MERLIN SAINTE-MARIE", "Distribution spécialisée – réserve & cour",
+      AV, "97438", "Sainte-Marie", P_MAGAS, "P1", "Source annuaire",
+      "Réception, réserve, cour matériaux, drive. Enseigne nationale : dossier alternance "
+      "cadré. Passer par le magasin ET le portail recrutement de l'enseigne."),
+    L("LA POSTE – centre courrier / colis Sainte-Marie", "Poste et courrier / Colis",
+      "2 rue Ravine", "97438", "Sainte-Marie", P_QUAI, "P2", "Source annuaire",
+      "Tri et distribution de colis (Colissimo). Gros recruteur en alternance, "
+      "mais dossier centralisé : passer par la RH régionale La Poste Réunion."),
+    L("SIPR / MAD-SIPR – site Sainte-Marie", "Logistique pharmaceutique / Matériel médical",
+      AV, "97438", "Sainte-Marie", P_MAGAS, "P2", "Source annuaire",
+      "Groupe SIPR, 3 sites sur l'île. Magasin de matériel médical : gestion de stock "
+      "et préparation de commandes tracées."),
     L("SD BEAUSÉJOUR (supermarché)", "Grande distribution – réserve",
       "200 avenue Beau Pays", "97438", "Sainte-Marie", P_ELOG, "P2", "Source annuaire",
       "Réception marchandises / réserve : poste d'employé logistique."),
@@ -221,16 +272,30 @@ SAINT_ANDRE = [
     L("SUPER U SAINT-ANDRÉ", "Grande distribution – réserve",
       AV, "97440", "Saint-André", P_ELOG, "P2", "Source annuaire",
       "Réception / réserve / drive : plusieurs postes possibles."),
+    L("TEREOS OCÉAN INDIEN – SUCRERIE DE BOIS-ROUGE", "Industrie sucrière / Flux & expéditions",
+      "Bois-Rouge – Cambuston", "97440", "Saint-André", P_MAGAS, "P1", "Source annuaire",
+      "Le plus gros site industriel de l'Est. Campagne sucrière de juillet à décembre : "
+      "pics de flux, magasin de pièces, réception canne, expédition du sucre. "
+      "Passer par la RH de Tereos Océan Indien (siège 974).",
+      site="https://www.tereos.re/"),
+    L("SKAL BRICO SODIS", "Négoce de matériaux / Dépôt",
+      "705 chemin Lagourgue", "97440", "Saint-André", P_MAGAS, "P2", "Source annuaire",
+      "Dépôt de matériaux : réception, cour, magasinier-cariste."),
 ]
 
 BRAS_PANON = [
     L("CRÉOLE LOGISTIQUE TRANSPORT", "Transport de fret interurbain",
-      AV, "97412", "Bras-Panon", P_OPLOG, "P1", "Vérifié",
-      "SIRET relevé sur base publique (siège Bras-Panon), à reconfirmer. "
-      "Classée INSEE en transport de fret interurbain.",
+      "22 bis RN2 – Rivière des Roches", "97412", "Bras-Panon", P_OPLOG, "P1", "Vérifié",
+      "SIRET et adresse relevés sur base publique (siège Bras-Panon), à reconfirmer sur "
+      "l'Annuaire des Entreprises. Classée INSEE en transport routier de fret interurbain. "
+      "Entreprise installée depuis une dizaine d'années : tuteur potentiel expérimenté.",
       siret="80216938300014"),
     L("AFA MARIE", "Transport routier",
       AV, "97412", "Bras-Panon", P_QUAI, "P3", "Source annuaire", ""),
+    L("WIN LOCATION", "Location (activité à qualifier)",
+      "6 rue des Palmiers", "97412", "Bras-Panon", P_MAGAS, "P3", "A vérifier",
+      "Activité exacte à confirmer via le code APE. Si location de matériel : "
+      "il y a un parc et un magasin à gérer, donc un vrai poste d'apprenti."),
 ]
 
 SAINT_BENOIT = [
@@ -253,6 +318,11 @@ SAINT_BENOIT = [
     L("SUPER U CHANE FAT", "Grande distribution – réserve",
       "1 rue Louis Brunet", "97470", "Saint-Benoît", P_ELOG, "P2", "Source annuaire",
       "Franchise indépendante : décision rapide, parler directement au dirigeant."),
+    L("TRANSPORT ROUTIER LEGROS", "Transport routier de fret interurbain",
+      "800 chemin Commence", "97437", "Sainte-Anne (Saint-Benoît)", P_OPLOG, "P2",
+      "Source annuaire",
+      "SARL créée en 2021, transports routiers de fret interurbains. Structure jeune : "
+      "argument « formez dès maintenant votre futur exploitant / préparateur »."),
 ]
 
 EST_PROFOND = [
@@ -311,27 +381,27 @@ def feuille_commune(wb, nom_onglet, lignes, sous_titre):
     for j, e in enumerate(lignes, start=1):
         row = r + j
         vals = [j, e["nom"], e["seg"], e["adr"], e["cp"], e["com"], e["siret"], e["ape"],
-                e["lib_ape"], e["dg"], e["fonc"], e["tel"], e["mail"], e["site"],
-                e["poste"], e["prio"], e["fiab"],
+                e["lib_ape"], e["eff"], e["dg"], e["fonc"], e["tel"], e["mail"],
+                e["site"], e["poste"], e["prio"], e["fiab"],
                 "Ouvrir la fiche entreprise", "A contacter", "", e["notes"]]
         for k, v in enumerate(vals, start=1):
             c = ws.cell(row=row, column=k, value=v)
             c.font, c.border = F_CORPS, BORD
-            c.alignment = Alignment(vertical="top", wrap_text=(k in (2, 4, 9, 15, 21)))
+            c.alignment = Alignment(vertical="top", wrap_text=(k in (2, 4, 9, 16, 22)))
             if j % 2 == 0:
                 c.fill = FILL_ALT
         ws.cell(row=row, column=2).font = F_GRAS
         # SIRET en texte (ne jamais perdre les zeros de tete)
         ws.cell(row=row, column=7).number_format = "@"
-        ws.cell(row=row, column=12).number_format = "@"
-        ws.cell(row=row, column=20).number_format = "DD/MM/YYYY"
+        ws.cell(row=row, column=13).number_format = "@"
+        ws.cell(row=row, column=21).number_format = "DD/MM/YYYY"
         # lien de verification
-        lc = ws.cell(row=row, column=18)
+        lc = ws.cell(row=row, column=19)
         lc.hyperlink = lien_annuaire(e["nom"], e["com"])
         lc.font = F_LIEN
         # site web cliquable
         if str(e["site"]).startswith("http"):
-            sc = ws.cell(row=row, column=14)
+            sc = ws.cell(row=row, column=15)
             sc.hyperlink = e["site"]
             sc.font = F_LIEN
         ws.row_dimensions[row].height = 46
@@ -342,7 +412,7 @@ def feuille_commune(wb, nom_onglet, lignes, sous_titre):
         dv_st = DataValidation(type="list", formula1=STATUTS, allow_blank=True)
         dv_pr = DataValidation(type="list", formula1=PRIORITES, allow_blank=True)
         dv_fi = DataValidation(type="list", formula1=FIABILITES, allow_blank=True)
-        for dv, col in ((dv_st, "S"), (dv_pr, "P"), (dv_fi, "Q")):
+        for dv, col in ((dv_st, "T"), (dv_pr, "Q"), (dv_fi, "R")):
             ws.add_data_validation(dv)
             dv.add(f"{col}{r+1}:{col}{r+400}")
 
@@ -404,6 +474,21 @@ blocs = [
                  "élargir vous-même le fichier depuis l'Annuaire des Entreprises."),
     ("10 Script d'appel", "Trame d'appel à froid, argumentaire employeur et réponses aux objections les plus "
                  "fréquentes."),
+    ("11 Sources & mise à jour", "D'où viennent les données, et où aller les actualiser."),
+    ("", ""),
+    ("REMPLISSAGE AUTOMATIQUE – 2 MINUTES", ""),
+    ("Le script d'auto-complétion", "Le fichier « completer_via_annuaire.py » (fourni à côté de ce classeur) "
+                 "interroge l'API officielle de l'INSEE (recherche-entreprises.api.gouv.fr) et remplit tout seul "
+                 "les colonnes SIRET, Code APE, Libellé APE, Effectif et Dirigeant, pour toutes les lignes du fichier."),
+    ("Comment le lancer", "Sur Mac : ouvrir le Terminal. Sur PC : ouvrir l'invite de commandes. "
+                 "Taper : python3 completer_via_annuaire.py  (voir le fichier LISEZ-MOI.md pour le détail). "
+                 "Le script crée une COPIE enrichie et ne touche jamais à votre fichier de travail."),
+    ("Ce qu'il ne fait pas", "Il ne remplit ni les téléphones ni les emails : ces données ne sont dans aucune "
+                 "base ouverte. Il ne remplit une case QUE s'il est sûr de l'entreprise ; sinon il laisse "
+                 "« A VERIFIER » et note le doute dans le journal."),
+    ("La colonne Effectif", "Tranche d'effectif salarié INSEE. C'est votre filtre le plus utile : une entreprise "
+                 "de 0 salarié ne pourra pas tutorer un apprenti, une entreprise de 10 à 50 salariés est "
+                 "la cible idéale."),
 ]
 r = 5
 for titre, txt in blocs:
@@ -444,7 +529,7 @@ for i, h in enumerate(hdr, start=1):
     c.alignment = Alignment(horizontal="center", wrap_text=True)
 r = 6
 for nom_onglet, n in compteurs:
-    q = f"'{nom_onglet}'!$S$5:$S$400"
+    q = f"'{nom_onglet}'!$T$5:$T$400"
     ws.cell(row=r, column=1, value=nom_onglet).font = F_CORPS
     ws.cell(row=r, column=2, value=n).font = F_CORPS
     ws.cell(row=r, column=3, value=f'=COUNTIF({q},"A contacter")')
@@ -625,6 +710,12 @@ src = [
     ("Annuaire des transitaires de La Réunion", "https://www.reunion-directory.com/professions/transit-douane.html"),
     ("CCI Réunion (fichiers entreprises, événements)", "https://www.reunion.cci.fr/"),
     ("France Travail / offres logistique 974", "https://candidat.francetravail.fr/offres/recherche"),
+    ("Annuaire fret – Aéroport Roland Garros", "https://www.reunion.aeroport.fr/fret/annuaire"),
+    ("Kompass – Transports et logistique Saint-André", "https://fr.kompass.com/s/transports-et-logistique/10/v/saint-andre/fr_04_974_97409/"),
+    ("Pages Jaunes – fiche SIRET Créole Logistique Transport", "https://www.pagesjaunes.fr/siret/80216938300014"),
+    ("Tereos Océan Indien (sucrerie de Bois-Rouge)", "https://www.tereos.re/visitez-nos-sucreries/sucrerie-de-bois-rouge"),
+    ("Groupe SIPR / CERP Réunion (répartition pharmaceutique)", "https://www.cerp-sipr.com/cerp/"),
+    ("SIFA Logistics – agence Réunion", "https://sifalogistics.com/nos-agences/sifa-reunion/"),
 ]
 r = 4
 ws.cell(row=r, column=1, value="SOURCES UTILISÉES POUR CONSTRUIRE CE FICHIER").font = F_H2
@@ -642,6 +733,8 @@ for txt in [
     "• Les emails et téléphones directs ne figurent dans aucune base ouverte : ils se collectent sur le site de l'entreprise ou par téléphone.",
     "• Sainte-Rose, La Plaine-des-Palmistes et Salazie comptent très peu d'entreprises logistiques : le potentiel y est surtout en commerce de proximité et transport agricole.",
     "• Le fichier est une base de départ : il doit vivre. Ajoutez une ligne à chaque entreprise rencontrée sur le terrain.",
+    "• Les entreprises ajoutées lors de l'enrichissement proviennent d'annuaires en ligne (annuaire fret de l'aéroport, Kompass, Pages Jaunes) : le NOM est fiable, l'adresse est à confirmer, et le SIRET reste à récupérer via le lien de la colonne S ou via le script d'auto-complétion.",
+    "• Une ligne porte la mention « A vérifier » en fiabilité (KUEHNE + NAGEL) : sa présence à La Réunion est citée mais non confirmée. Vérifiez-la sur l'Annuaire des Entreprises avant d'appeler.",
 ]:
     c = ws.cell(row=r, column=1, value=txt); c.font = F_CORPS
     c.alignment = Alignment(vertical="top", wrap_text=True)
