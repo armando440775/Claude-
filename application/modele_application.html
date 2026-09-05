@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alternance 974 – Offres et candidats du bassin Nord-Est</title>
+<style>
+  :root{
+    --bleu:#1F3864; --bleu2:#2E75B6; --bleu-pale:#EAF1FA;
+    --orange:#ED7D31; --vert:#4E9A51; --rouge:#C0392B;
+    --gris:#F4F6F9; --gris2:#E3E8EF; --texte:#1F2937; --doux:#6B7280;
+    --blanc:#fff; --ombre:0 1px 3px rgba(16,24,40,.08),0 1px 2px rgba(16,24,40,.06);
+    --radius:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--texte);background:var(--gris)}
+  h1,h2,h3{margin:0;font-weight:700;letter-spacing:-.01em}
+  button{font:inherit;cursor:pointer}
+  input,select,textarea{font:inherit;color:inherit}
+
+  /* ---------- Structure ---------- */
+  .app{display:flex;min-height:100vh}
+  .nav{width:216px;flex:0 0 216px;background:var(--bleu);color:#fff;display:flex;flex-direction:column;
+       position:sticky;top:0;height:100vh}
+  .nav .marque{padding:18px 18px 14px;border-bottom:1px solid rgba(255,255,255,.14)}
+  .nav .marque b{display:block;font-size:16px}
+  .nav .marque span{font-size:11.5px;opacity:.75}
+  .nav nav{padding:10px 8px;flex:1;overflow:auto}
+  .nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;
+              color:#dbe4f2;padding:10px 12px;border-radius:8px;font-size:14px}
+  .nav button:hover{background:rgba(255,255,255,.09);color:#fff}
+  .nav button.actif{background:#fff;color:var(--bleu);font-weight:600}
+  .nav button .pastille{margin-left:auto;background:rgba(255,255,255,.18);border-radius:20px;
+              padding:1px 8px;font-size:11.5px;font-variant-numeric:tabular-nums}
+  .nav button.actif .pastille{background:var(--bleu-pale);color:var(--bleu)}
+  .nav .pied{padding:12px;border-top:1px solid rgba(255,255,255,.14);font-size:11.5px;color:#b9c7de}
+  .contenu{flex:1;min-width:0;padding:22px 26px 60px}
+  .entete{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+  .entete h1{font-size:22px;color:var(--bleu)}
+  .entete p{margin:4px 0 0;color:var(--doux);max-width:70ch}
+  .entete .actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+
+  /* ---------- Composants ---------- */
+  .btn{background:var(--bleu2);color:#fff;border:0;border-radius:8px;padding:9px 14px;font-weight:600;
+       box-shadow:var(--ombre)}
+  .btn:hover{filter:brightness(1.06)}
+  .btn.sec{background:#fff;color:var(--bleu);border:1px solid var(--gris2)}
+  .btn.sec:hover{background:var(--bleu-pale)}
+  .btn.org{background:var(--orange)}
+  .btn.danger{background:#fff;color:var(--rouge);border:1px solid #f2c6c0}
+  .btn.mini{padding:5px 10px;font-size:12.5px;border-radius:6px;box-shadow:none}
+  .carte{background:#fff;border:1px solid var(--gris2);border-radius:var(--radius);box-shadow:var(--ombre)}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;margin-bottom:20px}
+  .kpi{padding:14px 16px}
+  .kpi .v{font-size:26px;font-weight:700;color:var(--bleu);font-variant-numeric:tabular-nums}
+  .kpi .l{color:var(--doux);font-size:12.5px;margin-top:2px}
+  .kpi .s{font-size:11.5px;color:var(--doux);margin-top:6px}
+  .barre{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .champ{display:flex;flex-direction:column;gap:4px}
+  .champ label{font-size:12px;color:var(--doux);font-weight:600}
+  input[type=text],input[type=date],input[type=number],input[type=email],input[type=tel],select,textarea{
+    border:1px solid var(--gris2);border-radius:8px;padding:8px 10px;background:#fff;min-width:0}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--bleu2);outline-offset:-1px}
+  .recherche{flex:1;min-width:220px}
+  table{width:100%;border-collapse:collapse;background:#fff}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--gris2);vertical-align:top}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--doux);background:#fbfcfe;
+     position:sticky;top:0;z-index:1}
+  tbody tr:hover{background:var(--bleu-pale)}
+  .tableau{overflow:auto;max-height:calc(100vh - 260px);border-radius:var(--radius);
+           border:1px solid var(--gris2);box-shadow:var(--ombre)}
+  .nom{font-weight:600;color:var(--bleu)}
+  .sous{font-size:12px;color:var(--doux)}
+  .etiq{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:600;
+        border:1px solid transparent;white-space:nowrap}
+  .e-bleu{background:var(--bleu-pale);color:var(--bleu)}
+  .e-vert{background:#E7F4E8;color:#2F6F33}
+  .e-orange{background:#FDEEE3;color:#A9531A}
+  .e-gris{background:var(--gris);color:var(--doux)}
+  .e-rouge{background:#FBE9E7;color:var(--rouge)}
+  .vide{padding:40px 20px;text-align:center;color:var(--doux)}
+  .vide b{display:block;color:var(--texte);margin-bottom:6px;font-size:15px}
+
+  /* ---------- Score ---------- */
+  .score{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-variant-numeric:tabular-nums}
+  .jauge{width:56px;height:7px;border-radius:5px;background:var(--gris2);overflow:hidden}
+  .jauge i{display:block;height:100%;background:var(--vert)}
+  .score.moyen .jauge i{background:var(--orange)}
+  .score.faible .jauge i{background:#B0B7C3}
+  .pourquoi{font-size:12px;color:var(--doux);margin-top:4px}
+
+  /* ---------- Fenetre modale ---------- */
+  .voile{position:fixed;inset:0;background:rgba(17,24,39,.45);display:flex;align-items:flex-start;
+         justify-content:center;padding:40px 16px;overflow:auto;z-index:50}
+  .modale{background:#fff;border-radius:12px;width:min(760px,100%);box-shadow:0 20px 40px rgba(0,0,0,.2)}
+  .modale header{padding:16px 20px;border-bottom:1px solid var(--gris2);display:flex;align-items:center}
+  .modale header h3{font-size:17px;color:var(--bleu)}
+  .modale header button{margin-left:auto;background:none;border:0;font-size:22px;color:var(--doux);line-height:1}
+  .modale .corps{padding:18px 20px}
+  .modale footer{padding:14px 20px;border-top:1px solid var(--gris2);display:flex;gap:10px;justify-content:flex-end}
+  .grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .grille .large{grid-column:1/-1}
+  .aide{font-size:12px;color:var(--doux);margin-top:4px}
+  .cases{display:flex;flex-wrap:wrap;gap:6px}
+  .cases label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--gris2);border-radius:20px;
+               padding:5px 11px;font-size:12.5px;cursor:pointer;background:#fff}
+  .cases label:hover{background:var(--bleu-pale)}
+  .cases input{accent-color:var(--bleu2)}
+
+  .encart{background:var(--bleu-pale);border:1px solid #cfe0f3;border-radius:var(--radius);padding:12px 14px;
+          margin-bottom:16px;font-size:13px}
+  .encart b{color:var(--bleu)}
+  .avert{background:#FFF8E6;border-color:#F2DFA8}
+  .avert b{color:#8A6100}
+  .lignes{display:flex;flex-direction:column;gap:10px}
+  .ligne{padding:12px 14px;display:flex;gap:14px;align-items:flex-start}
+  .ligne .droite{margin-left:auto;text-align:right;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+  @media (max-width:820px){
+    .app{flex-direction:column}
+    .nav{width:auto;flex:none;height:auto;position:static}
+    .nav nav{display:flex;flex-wrap:wrap}
+    .nav button{width:auto}
+    .contenu{padding:16px}
+  }
+  @media print{.nav,.entete .actions,.barre{display:none}.contenu{padding:0}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="nav">
+    <div class="marque">
+      <b>Alternance 974</b>
+      <span>Offres &amp; candidats – bassin Nord-Est</span>
+    </div>
+    <nav id="menu"></nav>
+    <div class="pied">
+      Données enregistrées sur cet ordinateur uniquement.<br>
+      <span id="majPied"></span>
+    </div>
+  </aside>
+  <main class="contenu" id="vue"></main>
+</div>
+<div id="modale"></div>
+<script>
+/* =====================================================================
+   Alternance 974 — mise en relation offre / demande d'apprentissage
+   Bassin Nord-Est de La Reunion. Application autonome : aucune donnee
+   ne sort de cet ordinateur, tout est stocke dans le navigateur.
+   ===================================================================== */
+
+/* ---------------------------------------------------- Referentiels */
+const COMMUNES = [
+  {id:"saint-denis",       nom:"Saint-Denis",              axe:0,   hauteurs:false},
+  {id:"sainte-clotilde",   nom:"Sainte-Clotilde",          axe:0.5, hauteurs:false},
+  {id:"saint-denis-hauts", nom:"Saint-Denis (hauteurs)",   axe:0.5, hauteurs:true},
+  {id:"sainte-marie",      nom:"Sainte-Marie",             axe:1.5, hauteurs:false},
+  {id:"sainte-suzanne",    nom:"Sainte-Suzanne",           axe:2.5, hauteurs:false},
+  {id:"saint-andre",       nom:"Saint-André",              axe:3.5, hauteurs:false},
+  {id:"salazie",           nom:"Salazie",                  axe:4.5, hauteurs:true},
+  {id:"bras-panon",        nom:"Bras-Panon",               axe:4.5, hauteurs:false},
+  {id:"saint-benoit",      nom:"Saint-Benoît",             axe:5.5, hauteurs:false},
+  {id:"sainte-anne",       nom:"Sainte-Anne",              axe:6,   hauteurs:false},
+  {id:"plaine-palmistes",  nom:"La Plaine-des-Palmistes",  axe:6.5, hauteurs:true},
+  {id:"sainte-rose",       nom:"Sainte-Rose",              axe:7,   hauteurs:false},
+  {id:"multi",             nom:"Plusieurs communes",       axe:3.5, hauteurs:false},
+  {id:"hors",              nom:"Hors bassin Nord-Est",     axe:14,  hauteurs:false},
+];
+const communeNom = id => (COMMUNES.find(c=>c.id===id)||{}).nom || "—";
+
+const METIERS = [
+  {id:"vente",      nom:"Employé commercial / Vendeur en magasin",       fam:"commerce"},
+  {id:"conseil",    nom:"Conseiller de vente",                           fam:"commerce"},
+  {id:"manager",    nom:"Assistant manager d'unité marchande",           fam:"commerce"},
+  {id:"ndrc",       nom:"Commercial / Négociation client",               fam:"commerce"},
+  {id:"relclient",  nom:"Relation client à distance / Télévente",        fam:"commerce"},
+  {id:"drive",      nom:"Employé de drive / Préparation en magasin",     fam:"mixte"},
+  {id:"prepa",      nom:"Préparateur de commandes / Opérateur log.",     fam:"logistique"},
+  {id:"magasinier", nom:"Magasinier / Gestionnaire de stocks",           fam:"logistique"},
+  {id:"quai",       nom:"Agent de quai / Réception-expédition",          fam:"logistique"},
+  {id:"transit",    nom:"Agent de transit / Déclarant en douane",        fam:"logistique"},
+  {id:"elog",       nom:"Employé logistique en magasin",                 fam:"mixte"},
+  {id:"econome",    nom:"Économat / Logistique de restauration",         fam:"logistique"},
+  {id:"pharma",     nom:"Logistique pharmaceutique / Magasin hospitalier",fam:"logistique"},
+];
+const metierNom = id => (METIERS.find(m=>m.id===id)||{}).nom || "—";
+const metierFam = id => (METIERS.find(m=>m.id===id)||{}).fam || "";
+
+const DIPLOMES = [
+  "CAP Équipier polyvalent du commerce",
+  "Bac Pro Métiers du commerce et de la vente",
+  "Bac Pro Logistique",
+  "Titre pro Vendeur-conseil en magasin",
+  "Titre pro Préparateur de commandes",
+  "Titre pro Agent magasinier",
+  "BTS Management commercial opérationnel (MCO)",
+  "BTS Négociation et digitalisation de la relation client (NDRC)",
+  "BTS Gestion des transports et logistique associée (GTLA)",
+  "Autre / à préciser",
+];
+const MOBILITES = [
+  {id:"voiture", nom:"Véhicule personnel",     coef:0.55},
+  {id:"scooter", nom:"Deux-roues",             coef:0.70},
+  {id:"bus",     nom:"Transports en commun",   coef:1.00},
+  {id:"aucune",  nom:"Aucune mobilité",        coef:1.90},
+];
+const mobiliteNom = id => (MOBILITES.find(m=>m.id===id)||{}).nom || "—";
+const mobiliteCoef = id => (MOBILITES.find(m=>m.id===id)||{coef:1}).coef;
+
+const STATUTS_OFFRE = ["A contacter","Message laissé","RDV pris","Visite faite",
+                       "Offre déposée","Candidat proposé","Contrat signé","Sans suite"];
+const STATUTS_CANDIDAT = ["Nouveau","Reçu en entretien","Prêt à placer",
+                          "En recherche active","Placé","Abandon"];
+const STATUTS_LIEN = ["Proposé","CV envoyé","Entretien planifié","Entretien réalisé",
+                      "Contrat signé","Refusé"];
+const OFFRE_FERMEE = s => s==="Contrat signé" || s==="Sans suite";
+
+/* Structures pre-chargees depuis les fichiers de prospection (genere) */
+const DONNEES_INITIALES = /*__DONNEES__*/[];
+
+/* ---------------------------------------------------- Etat + stockage */
+const CLE = "alternance974.v1";
+let etat = {offres:[], candidats:[], liens:[], maj:null};
+let vueCourante = "bord";
+
+function charger(){
+  try{
+    const brut = localStorage.getItem(CLE);
+    if(brut){ etat = Object.assign(etat, JSON.parse(brut)); return; }
+  }catch(e){ console.warn("Lecture du stockage impossible", e); }
+  etat.offres = DONNEES_INITIALES.map(o=>Object.assign({}, o));
+  etat.maj = new Date().toISOString();
+}
+function sauver(){
+  etat.maj = new Date().toISOString();
+  try{ localStorage.setItem(CLE, JSON.stringify(etat)); }
+  catch(e){ alert("Impossible d'enregistrer sur cet ordinateur.\nPensez à exporter votre sauvegarde (onglet Données)."); }
+}
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const esc = t => String(t==null?"":t).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const parJour = d => d ? new Date(d).toLocaleDateString("fr-FR") : "—";
+const aujourdhui = () => new Date().toISOString().slice(0,10);
+
+function age(candidat){
+  if(candidat.age) return Number(candidat.age);
+  if(!candidat.naissance) return null;
+  const n = new Date(candidat.naissance), h = new Date();
+  let a = h.getFullYear()-n.getFullYear();
+  const m = h.getMonth()-n.getMonth();
+  if(m<0 || (m===0 && h.getDate()<n.getDate())) a--;
+  return a;
+}
+
+/* ---------------------------------------------------- Moteur de matching */
+function distance(a, b){
+  const ca = COMMUNES.find(c=>c.id===a), cb = COMMUNES.find(c=>c.id===b);
+  if(!ca || !cb) return 4;
+  let d = Math.abs(ca.axe - cb.axe);
+  if(ca.hauteurs !== cb.hauteurs) d += 1.2;   // monter ou descendre coute plus cher
+  return d;
+}
+
+/* Retourne {total, details:[{label, points}]} pour un couple candidat/offre. */
+function scorer(candidat, offre){
+  const det = [];
+  const metiers = candidat.metiers || [];
+
+  let pMetier = 0, motif = "";
+  if(metiers.includes(offre.metier)){ pMetier = 50; motif = "Métier exactement recherché"; }
+  else if(metiers.some(m=>metierFam(m)===metierFam(offre.metier) && metierFam(offre.metier))){
+    pMetier = 30; motif = "Même famille de métier";
+  } else if(metiers.some(m=>metierFam(m)==="mixte") || metierFam(offre.metier)==="mixte"){
+    pMetier = 18; motif = "Métier passerelle commerce / logistique";
+  }
+  det.push({label: motif || "Métier différent de ceux recherchés", points: pMetier});
+
+  const d = distance(candidat.commune, offre.commune);
+  const dEff = d * mobiliteCoef(candidat.mobilite);
+  const pGeo = Math.round(Math.max(0, 30 * (1 - dEff/6)));
+  det.push({
+    label: d < 0.6 ? "Même secteur que le candidat"
+         : "Trajet " + communeNom(candidat.commune) + " → " + communeNom(offre.commune)
+           + " (" + mobiliteNom(candidat.mobilite).toLowerCase() + ")",
+    points: pGeo
+  });
+  // Un bon métier ne compense pas un trajet que le jeune ne peut pas faire.
+  if(pGeo === 0 && d > 0.6){
+    det.push({label:"⚠ Trajet difficilement réalisable au quotidien", points:-20});
+  }
+
+  let pStatut = 0, lStatut = "";
+  if(offre.statut === "Offre déposée"){ pStatut = 12; lStatut = "Offre ferme déjà déposée"; }
+  else if(offre.statut === "RDV pris" || offre.statut === "Visite faite"){ pStatut = 6; lStatut = "Structure déjà rencontrée"; }
+  if(pStatut) det.push({label:lStatut, points:pStatut});
+
+  let pPrio = 0;
+  if(offre.priorite === "P1"){ pPrio = 6; }
+  else if(offre.priorite === "P2"){ pPrio = 3; }
+  if(pPrio) det.push({label:"Structure prioritaire " + offre.priorite, points:pPrio});
+
+  const a = age(candidat);
+  if(a !== null && (a < 16 || a > 25)){
+    det.push({label:"⚠ " + a + " ans : hors de la tranche 16-25 ans", points:-20});
+  }
+  if(dejaLie(candidat.id, offre.id)){
+    det.push({label:"Mise en relation déjà créée", points:-25});
+  }
+
+  const total = Math.max(0, Math.min(100, det.reduce((s,x)=>s+x.points,0)));
+  return {total, details:det};
+}
+
+const dejaLie = (cid,oid) => etat.liens.some(l=>l.candidatId===cid && l.offreId===oid);
+
+function meilleuresOffres(candidat, mini=25){
+  return etat.offres
+    .filter(o=>!OFFRE_FERMEE(o.statut))
+    .map(o=>({offre:o, ...scorer(candidat,o)}))
+    .filter(x=>x.total>=mini)
+    .sort((a,b)=>b.total-a.total);
+}
+function meilleursCandidats(offre, mini=25){
+  return etat.candidats
+    .filter(c=>c.statut!=="Placé" && c.statut!=="Abandon")
+    .map(c=>({candidat:c, ...scorer(c,offre)}))
+    .filter(x=>x.total>=mini)
+    .sort((a,b)=>b.total-a.total);
+}
+
+/* ---------------------------------------------------- Rendu : briques */
+function jauge(score){
+  const cls = score>=70 ? "" : score>=45 ? "moyen" : "faible";
+  return `<span class="score ${cls}">${score}<span class="jauge"><i style="width:${score}%"></i></span></span>`;
+}
+function etiqStatut(s){
+  const v = {"Contrat signé":"e-vert","Offre déposée":"e-vert","Placé":"e-vert",
+             "Sans suite":"e-gris","Abandon":"e-gris","Refusé":"e-rouge",
+             "RDV pris":"e-orange","Entretien planifié":"e-orange","Prêt à placer":"e-orange",
+             "Visite faite":"e-bleu","Candidat proposé":"e-bleu","CV envoyé":"e-bleu"}[s] || "e-gris";
+  return `<span class="etiq ${v}">${esc(s)}</span>`;
+}
+function options(liste, choisi, cle, lib){
+  return liste.map(x=>{
+    const v = cle ? x[cle] : x, t = lib ? x[lib] : x;
+    return `<option value="${esc(v)}"${v===choisi?" selected":""}>${esc(t)}</option>`;
+  }).join("");
+}
+function selCommune(nom, val){
+  return `<select name="${nom}"><option value="">— choisir —</option>${options(COMMUNES,val,"id","nom")}</select>`;
+}
+</script>
+<script>
+/* ---------------------------------------------------- Navigation */
+const VUES = [
+  {id:"bord",     libelle:"Tableau de bord"},
+  {id:"offres",   libelle:"Offres & structures"},
+  {id:"candidats",libelle:"Candidats"},
+  {id:"matching", libelle:"Mise en relation"},
+  {id:"suivi",    libelle:"Suivi des placements"},
+  {id:"donnees",  libelle:"Données & sauvegarde"},
+];
+const filtres = {
+  offres:   {q:"", commune:"", metier:"", statut:"", secteur:""},
+  candidats:{q:"", commune:"", metier:"", statut:""},
+  matching: {cible:"", type:"candidat"},
+};
+
+function rendreMenu(){
+  const compte = {offres:etat.offres.length, candidats:etat.candidats.length,
+                  suivi:etat.liens.filter(l=>l.statut!=="Refusé").length};
+  document.getElementById("menu").innerHTML = VUES.map(v=>{
+    const n = compte[v.id];
+    return `<button data-action="aller" data-vue="${v.id}" class="${v.id===vueCourante?"actif":""}">
+      ${esc(v.libelle)}${n!==undefined?`<span class="pastille">${n}</span>`:""}</button>`;
+  }).join("");
+  document.getElementById("majPied").textContent =
+    etat.maj ? "Dernière modification : " + new Date(etat.maj).toLocaleString("fr-FR") : "";
+}
+
+function rendre(){
+  rendreMenu();
+  document.getElementById("vue").innerHTML = vues[vueCourante]();
+  window.scrollTo(0,0);
+}
+
+/* ---------------------------------------------------- Vue : tableau de bord */
+const vues = {};
+vues.bord = function(){
+  const o = etat.offres, c = etat.candidats, l = etat.liens;
+  const ouvertes = o.filter(x=>!OFFRE_FERMEE(x.statut)).length;
+  const deposees = o.filter(x=>x.statut==="Offre déposée").length;
+  const aPlacer = c.filter(x=>x.statut==="Prêt à placer"||x.statut==="En recherche active").length;
+  const signes = l.filter(x=>x.statut==="Contrat signé").length;
+  const enCours = l.filter(x=>x!=null && !["Contrat signé","Refusé"].includes(x.statut)).length;
+  const aContacter = o.filter(x=>x.statut==="A contacter").length;
+
+  // Meilleures suggestions, tous candidats confondus
+  let sugg = [];
+  c.filter(x=>x.statut!=="Placé" && x.statut!=="Abandon").forEach(cand=>{
+    meilleuresOffres(cand, 45).slice(0,3).forEach(m=>sugg.push({cand, ...m}));
+  });
+  sugg.sort((a,b)=>b.total-a.total);
+  sugg = sugg.slice(0,6);
+
+  return `
+  <div class="entete">
+    <div>
+      <h1>Tableau de bord</h1>
+      <p>Vue d'ensemble de votre campagne : ce qui est ouvert, qui est à placer, et les rapprochements
+         les plus évidents à traiter aujourd'hui.</p>
+    </div>
+    <div class="actions">
+      <button class="btn" data-action="nouvelle-offre">+ Offre / structure</button>
+      <button class="btn org" data-action="nouveau-candidat">+ Candidat</button>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="carte kpi"><div class="v">${ouvertes}</div><div class="l">Structures actives</div>
+      <div class="s">${aContacter} encore à contacter</div></div>
+    <div class="carte kpi"><div class="v">${deposees}</div><div class="l">Offres fermes déposées</div>
+      <div class="s">prêtes à recevoir un candidat</div></div>
+    <div class="carte kpi"><div class="v">${aPlacer}</div><div class="l">Candidats à placer</div>
+      <div class="s">sur ${c.length} inscrits</div></div>
+    <div class="carte kpi"><div class="v">${enCours}</div><div class="l">Mises en relation en cours</div>
+      <div class="s">${signes} contrat${signes>1?"s":""} signé${signes>1?"s":""}</div></div>
+  </div>
+
+  ${c.length===0 ? `<div class="encart avert"><b>Commencez par saisir un candidat.</b>
+     Les ${o.length} structures du bassin sont déjà chargées : dès qu'un jeune est enregistré,
+     l'application vous propose les employeurs les plus pertinents pour lui.</div>` : ""}
+
+  <h2 style="font-size:16px;color:var(--bleu);margin:22px 0 10px">Rapprochements à traiter</h2>
+  ${sugg.length===0 ? `<div class="carte vide"><b>Aucune suggestion pour l'instant</b>
+      Ajoutez un candidat, ou élargissez ses métiers recherchés.</div>` :
+  `<div class="lignes">${sugg.map(s=>`
+    <div class="carte ligne">
+      <div>
+        <div class="nom">${esc(s.cand.prenom)} ${esc(s.cand.nom)} <span class="sous">→</span> ${esc(s.offre.structure)}</div>
+        <div class="sous">${esc(metierNom(s.offre.metier))} · ${esc(communeNom(s.offre.commune))}</div>
+        <div class="pourquoi">${s.details.filter(d=>d.points>0).map(d=>esc(d.label)).join(" · ")}</div>
+      </div>
+      <div class="droite">
+        ${jauge(s.total)}
+        <button class="btn mini" data-action="creer-lien" data-cand="${s.cand.id}" data-offre="${s.offre.id}">
+          Mettre en relation</button>
+      </div>
+    </div>`).join("")}</div>`}
+  `;
+};
+
+/* ---------------------------------------------------- Vue : offres */
+vues.offres = function(){
+  const f = filtres.offres;
+  const liste = etat.offres.filter(o=>{
+    const t = (o.structure+" "+o.type+" "+o.poste+" "+(o.contact||"")+" "+(o.notes||"")).toLowerCase();
+    return (!f.q || t.includes(f.q.toLowerCase()))
+        && (!f.commune || o.commune===f.commune)
+        && (!f.metier  || o.metier===f.metier)
+        && (!f.statut  || o.statut===f.statut)
+        && (!f.secteur || o.secteur===f.secteur);
+  });
+  return `
+  <div class="entete">
+    <div>
+      <h1>Offres &amp; structures</h1>
+      <p>${etat.offres.length} employeurs potentiels du bassin Nord-Est. Cliquez sur une ligne pour
+         voir la fiche et les candidats compatibles.</p>
+    </div>
+    <div class="actions">
+      <button class="btn" data-action="nouvelle-offre">+ Ajouter</button>
+    </div>
+  </div>
+  <div class="barre">
+    <div class="champ recherche"><label>Rechercher</label>
+      <input type="text" data-filtre="offres.q" value="${esc(f.q)}" placeholder="Nom, poste, contact, notes…"></div>
+    <div class="champ"><label>Commune</label>
+      <select data-filtre="offres.commune"><option value="">Toutes</option>${options(COMMUNES,f.commune,"id","nom")}</select></div>
+    <div class="champ"><label>Métier</label>
+      <select data-filtre="offres.metier"><option value="">Tous</option>${options(METIERS,f.metier,"id","nom")}</select></div>
+    <div class="champ"><label>Secteur</label>
+      <select data-filtre="offres.secteur"><option value="">Tous</option>
+        <option value="prive"${f.secteur==="prive"?" selected":""}>Privé</option>
+        <option value="public"${f.secteur==="public"?" selected":""}>Public / santé</option></select></div>
+    <div class="champ"><label>Statut</label>
+      <select data-filtre="offres.statut"><option value="">Tous</option>${options(STATUTS_OFFRE,f.statut)}</select></div>
+  </div>
+  ${liste.length===0 ? `<div class="carte vide"><b>Aucune structure ne correspond</b>Modifiez vos filtres.</div>` : `
+  <div class="tableau"><table>
+    <thead><tr><th>Structure</th><th>Poste visé</th><th>Commune</th><th>Priorité</th>
+      <th>Statut</th><th>Candidats compatibles</th></tr></thead>
+    <tbody>${liste.map(o=>{
+      const n = meilleursCandidats(o,45).length;
+      return `<tr data-action="fiche-offre" data-id="${o.id}" style="cursor:pointer">
+        <td><div class="nom">${esc(o.structure)}</div><div class="sous">${esc(o.type||"")}</div></td>
+        <td>${esc(metierNom(o.metier))}</td>
+        <td>${esc(communeNom(o.commune))}</td>
+        <td><span class="etiq ${o.priorite==="P1"?"e-orange":"e-gris"}">${esc(o.priorite||"—")}</span></td>
+        <td>${etiqStatut(o.statut)}</td>
+        <td>${n ? `<span class="etiq e-vert">${n} candidat${n>1?"s":""}</span>` : `<span class="sous">—</span>`}</td>
+      </tr>`;}).join("")}</tbody>
+  </table></div>`}
+  <p class="sous" style="margin-top:10px">${liste.length} structure${liste.length>1?"s":""} affichée${liste.length>1?"s":""}.</p>
+  `;
+};
+
+/* ---------------------------------------------------- Vue : candidats */
+vues.candidats = function(){
+  const f = filtres.candidats;
+  const liste = etat.candidats.filter(c=>{
+    const t = (c.prenom+" "+c.nom+" "+(c.diplome||"")+" "+(c.notes||"")).toLowerCase();
+    return (!f.q || t.includes(f.q.toLowerCase()))
+        && (!f.commune || c.commune===f.commune)
+        && (!f.metier  || (c.metiers||[]).includes(f.metier))
+        && (!f.statut  || c.statut===f.statut);
+  });
+  return `
+  <div class="entete">
+    <div>
+      <h1>Candidats</h1>
+      <p>Les jeunes de 16 à 25 ans que vous accompagnez. Cliquez sur une ligne pour voir sa fiche
+         et les offres qui lui correspondent.</p>
+    </div>
+    <div class="actions"><button class="btn org" data-action="nouveau-candidat">+ Ajouter</button></div>
+  </div>
+  <div class="barre">
+    <div class="champ recherche"><label>Rechercher</label>
+      <input type="text" data-filtre="candidats.q" value="${esc(f.q)}" placeholder="Nom, diplôme, notes…"></div>
+    <div class="champ"><label>Commune</label>
+      <select data-filtre="candidats.commune"><option value="">Toutes</option>${options(COMMUNES,f.commune,"id","nom")}</select></div>
+    <div class="champ"><label>Métier recherché</label>
+      <select data-filtre="candidats.metier"><option value="">Tous</option>${options(METIERS,f.metier,"id","nom")}</select></div>
+    <div class="champ"><label>Statut</label>
+      <select data-filtre="candidats.statut"><option value="">Tous</option>${options(STATUTS_CANDIDAT,f.statut)}</select></div>
+  </div>
+  ${liste.length===0 ? `<div class="carte vide"><b>Aucun candidat enregistré</b>
+     Cliquez sur « Ajouter » pour saisir votre premier jeune.</div>` : `
+  <div class="tableau"><table>
+    <thead><tr><th>Candidat</th><th>Âge</th><th>Commune</th><th>Mobilité</th>
+      <th>Métiers recherchés</th><th>Statut</th><th>Offres compatibles</th></tr></thead>
+    <tbody>${liste.map(c=>{
+      const a = age(c), n = meilleuresOffres(c,45).length;
+      return `<tr data-action="fiche-candidat" data-id="${c.id}" style="cursor:pointer">
+        <td><div class="nom">${esc(c.prenom)} ${esc(c.nom)}</div><div class="sous">${esc(c.diplome||"")}</div></td>
+        <td>${a===null?"—":a+" ans"}${a!==null&&(a<16||a>25)?' <span class="etiq e-rouge">hors 16-25</span>':""}</td>
+        <td>${esc(communeNom(c.commune))}</td>
+        <td>${esc(mobiliteNom(c.mobilite))}</td>
+        <td>${(c.metiers||[]).map(m=>`<span class="etiq e-bleu">${esc(metierNom(m))}</span>`).join(" ") || "—"}</td>
+        <td>${etiqStatut(c.statut)}</td>
+        <td>${n ? `<span class="etiq e-vert">${n} offre${n>1?"s":""}</span>` : `<span class="sous">—</span>`}</td>
+      </tr>`;}).join("")}</tbody>
+  </table></div>`}
+  `;
+};
+
+/* ---------------------------------------------------- Vue : matching */
+vues.matching = function(){
+  const f = filtres.matching;
+  const parCandidat = f.type==="candidat";
+  let corps = "";
+
+  if(parCandidat){
+    const cand = etat.candidats.find(c=>c.id===f.cible);
+    if(!cand){
+      corps = `<div class="carte vide"><b>Choisissez un candidat</b>
+        L'application classera pour lui toutes les structures du bassin.</div>`;
+    } else {
+      const tous = meilleuresOffres(cand, 1), res = tous.slice(0,25);
+      corps = res.length===0 ? `<div class="carte vide"><b>Aucune offre compatible</b>
+          Élargissez les métiers recherchés ou la mobilité du candidat.</div>` :
+      `<p class="sous" style="margin:0 0 10px">${tous.length} structure${tous.length>1?"s":""} classée${tous.length>1?"s":""}
+        pour ${esc(cand.prenom)}${tous.length>25?" — les 25 meilleures sont affichées":""}.</p>
+       <div class="lignes">${res.map(r=>`
+        <div class="carte ligne">
+          <div>
+            <div class="nom">${esc(r.offre.structure)}</div>
+            <div class="sous">${esc(metierNom(r.offre.metier))} · ${esc(communeNom(r.offre.commune))}
+              · ${esc(r.offre.type||"")}</div>
+            <div class="pourquoi">${r.details.map(d=>
+              `${d.points<0?"⚠ ":""}${esc(d.label)} <b>${d.points>0?"+":""}${d.points}</b>`).join(" · ")}</div>
+          </div>
+          <div class="droite">
+            ${jauge(r.total)}
+            ${etiqStatut(r.offre.statut)}
+            ${dejaLie(cand.id, r.offre.id)
+              ? `<span class="sous">déjà en relation</span>`
+              : `<button class="btn mini" data-action="creer-lien" data-cand="${cand.id}" data-offre="${r.offre.id}">Mettre en relation</button>`}
+          </div>
+        </div>`).join("")}</div>`;
+    }
+  } else {
+    const offre = etat.offres.find(o=>o.id===f.cible);
+    if(!offre){
+      corps = `<div class="carte vide"><b>Choisissez une structure</b>
+        L'application classera vos candidats pour ce poste.</div>`;
+    } else {
+      const tous = meilleursCandidats(offre, 1), res = tous.slice(0,25);
+      corps = res.length===0 ? `<div class="carte vide"><b>Aucun candidat compatible</b>
+          Saisissez des candidats, ou vérifiez leurs métiers recherchés.</div>` :
+      `<p class="sous" style="margin:0 0 10px">${tous.length} candidat${tous.length>1?"s":""} classé${tous.length>1?"s":""}
+        pour ce poste${tous.length>25?" — les 25 meilleurs sont affichés":""}.</p>
+       <div class="lignes">${res.map(r=>`
+        <div class="carte ligne">
+          <div>
+            <div class="nom">${esc(r.candidat.prenom)} ${esc(r.candidat.nom)}</div>
+            <div class="sous">${age(r.candidat)===null?"":age(r.candidat)+" ans · "}${esc(communeNom(r.candidat.commune))}
+              · ${esc(mobiliteNom(r.candidat.mobilite))}</div>
+            <div class="pourquoi">${r.details.map(d=>
+              `${d.points<0?"⚠ ":""}${esc(d.label)} <b>${d.points>0?"+":""}${d.points}</b>`).join(" · ")}</div>
+          </div>
+          <div class="droite">
+            ${jauge(r.total)}
+            ${etiqStatut(r.candidat.statut)}
+            ${dejaLie(r.candidat.id, offre.id)
+              ? `<span class="sous">déjà en relation</span>`
+              : `<button class="btn mini" data-action="creer-lien" data-cand="${r.candidat.id}" data-offre="${offre.id}">Mettre en relation</button>`}
+          </div>
+        </div>`).join("")}</div>`;
+    }
+  }
+
+  return `
+  <div class="entete">
+    <div>
+      <h1>Mise en relation</h1>
+      <p>Choisissez un candidat pour voir les employeurs qui lui correspondent, ou une structure pour
+         voir les jeunes à lui présenter. Le score tient compte du métier, du trajet réel, de la
+         mobilité du jeune et de l'avancement de la relation avec l'employeur.</p>
+    </div>
+  </div>
+  <div class="barre">
+    <div class="champ"><label>Partir de</label>
+      <select data-filtre="matching.type">
+        <option value="candidat"${parCandidat?" selected":""}>Un candidat → des offres</option>
+        <option value="offre"${!parCandidat?" selected":""}>Une structure → des candidats</option>
+      </select></div>
+    <div class="champ recherche"><label>${parCandidat?"Candidat":"Structure"}</label>
+      <select data-filtre="matching.cible">
+        <option value="">— choisir —</option>
+        ${parCandidat
+          ? etat.candidats.map(c=>`<option value="${c.id}"${c.id===f.cible?" selected":""}>${esc(c.prenom+" "+c.nom)}</option>`).join("")
+          : etat.offres.filter(o=>!OFFRE_FERMEE(o.statut))
+              .map(o=>`<option value="${o.id}"${o.id===f.cible?" selected":""}>${esc(o.structure+" — "+communeNom(o.commune))}</option>`).join("")}
+      </select></div>
+  </div>
+  ${corps}`;
+};
+
+/* ---------------------------------------------------- Vue : suivi */
+vues.suivi = function(){
+  if(etat.liens.length===0){
+    return `<div class="entete"><div><h1>Suivi des placements</h1>
+      <p>Chaque mise en relation créée apparaît ici, de la proposition à la signature.</p></div></div>
+      <div class="carte vide"><b>Aucune mise en relation</b>
+      Allez dans « Mise en relation » pour rapprocher un candidat et une structure.</div>`;
+  }
+  const colonnes = STATUTS_LIEN.map(s=>{
+    const items = etat.liens.filter(l=>l.statut===s);
+    return `
+    <div style="min-width:0">
+      <h3 style="font-size:13px;color:var(--doux);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px">
+        ${esc(s)} <span class="etiq e-gris">${items.length}</span></h3>
+      <div class="lignes">${items.map(l=>{
+        const c = etat.candidats.find(x=>x.id===l.candidatId) || {prenom:"?",nom:""};
+        const o = etat.offres.find(x=>x.id===l.offreId) || {structure:"?"};
+        return `<div class="carte" style="padding:11px 12px">
+          <div class="nom" style="font-size:13.5px">${esc(c.prenom+" "+c.nom)}</div>
+          <div class="sous">${esc(o.structure)}</div>
+          <div class="sous">${parJour(l.date)}</div>
+          ${l.notes?`<div class="pourquoi">${esc(l.notes)}</div>`:""}
+          <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+            <button class="btn mini sec" data-action="avancer-lien" data-id="${l.id}">Faire avancer</button>
+            <button class="btn mini danger" data-action="supprimer-lien" data-id="${l.id}">Retirer</button>
+          </div>
+        </div>`;}).join("") || `<div class="sous" style="padding:6px 2px">—</div>`}</div>
+    </div>`;
+  }).join("");
+
+  return `
+  <div class="entete"><div><h1>Suivi des placements</h1>
+    <p>Le pipeline, de la proposition au contrat signé. « Faire avancer » passe à l'étape suivante.</p>
+  </div></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;align-items:start">
+    ${colonnes}
+  </div>`;
+};
+
+/* ---------------------------------------------------- Vue : donnees */
+vues.donnees = function(){
+  const manquantes = DONNEES_INITIALES.filter(d=>
+    !etat.offres.some(o=>o.structure===d.structure && o.commune===d.commune)).length;
+  return `
+  <div class="entete"><div><h1>Données &amp; sauvegarde</h1>
+    <p>Tout est enregistré sur cet ordinateur, dans ce navigateur. Rien n'est envoyé sur internet.</p>
+  </div></div>
+
+  <div class="encart avert">
+    <b>Données personnelles (RGPD).</b> Les fiches candidats contiennent des données personnelles de
+    mineurs et de jeunes majeurs. Elles restent sur cet ordinateur : ni serveur, ni cloud, ni envoi.
+    Ne partagez l'export qu'avec les personnes habilitées de votre CFA, et supprimez les fiches
+    devenues inutiles avec le bouton en bas de page.
+  </div>
+
+  <div class="grille">
+    <div class="carte" style="padding:16px">
+      <h3 style="font-size:15px;color:var(--bleu);margin-bottom:6px">Sauvegarder</h3>
+      <p class="sous">Un fichier unique qui contient offres, candidats et suivi. À faire une fois par semaine,
+         et avant de changer d'ordinateur.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn" data-action="export-json">Exporter la sauvegarde</button>
+        <button class="btn sec" data-action="import-json">Restaurer une sauvegarde</button>
+      </div>
+    </div>
+    <div class="carte" style="padding:16px">
+      <h3 style="font-size:15px;color:var(--bleu);margin-bottom:6px">Exporter vers Excel</h3>
+      <p class="sous">Fichiers CSV, à ouvrir directement dans Excel ou à joindre à un bilan.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn sec" data-action="export-csv" data-quoi="offres">Offres (CSV)</button>
+        <button class="btn sec" data-action="export-csv" data-quoi="candidats">Candidats (CSV)</button>
+        <button class="btn sec" data-action="export-csv" data-quoi="liens">Suivi (CSV)</button>
+      </div>
+    </div>
+    <div class="carte" style="padding:16px">
+      <h3 style="font-size:15px;color:var(--bleu);margin-bottom:6px">Structures de référence</h3>
+      <p class="sous">Les ${DONNEES_INITIALES.length} structures issues de vos fichiers de prospection.
+        ${manquantes ? `<b>${manquantes} ne sont pas (ou plus) dans votre liste.</b>` : "Toutes sont présentes."}</p>
+      <div style="margin-top:12px">
+        <button class="btn sec" data-action="recharger-base"${manquantes?"":" disabled"}>
+          Réintégrer les ${manquantes} manquantes</button>
+      </div>
+    </div>
+    <div class="carte" style="padding:16px">
+      <h3 style="font-size:15px;color:var(--rouge);margin-bottom:6px">Effacer</h3>
+      <p class="sous">Supprime définitivement toutes les données de cet ordinateur.
+         Exportez d'abord votre sauvegarde.</p>
+      <div style="margin-top:12px"><button class="btn danger" data-action="tout-effacer">Tout effacer</button></div>
+    </div>
+  </div>
+
+  <h2 style="font-size:16px;color:var(--bleu);margin:26px 0 10px">Comment le score est calculé</h2>
+  <div class="carte" style="padding:16px">
+    <table style="box-shadow:none">
+      <thead><tr><th>Critère</th><th>Points</th><th>Détail</th></tr></thead>
+      <tbody>
+        <tr><td>Métier</td><td>0 à 50</td><td>50 si le métier de l'offre fait partie des métiers recherchés
+          par le jeune, 30 si c'est la même famille (commerce ou logistique), 18 pour un métier passerelle.</td></tr>
+        <tr><td>Trajet</td><td>0 à 30</td><td>Distance le long de l'axe littoral Saint-Denis → Sainte-Rose,
+          pondérée par la mobilité du jeune. Monter ou descendre des hauteurs compte comme un trajet
+          supplémentaire.</td></tr>
+        <tr><td>Avancement</td><td>+6 à +12</td><td>Une offre ferme déjà déposée passe devant une structure
+          jamais contactée.</td></tr>
+        <tr><td>Priorité</td><td>+3 à +6</td><td>Reprend la priorité P1/P2 de vos fichiers de prospection.</td></tr>
+        <tr><td>Alertes</td><td>−20 / −25</td><td>Trajet impossible à faire au quotidien avec la mobilité
+          du jeune, candidat hors de la tranche 16-25 ans, ou mise en relation déjà existante.</td></tr>
+      </tbody>
+    </table>
+  </div>`;
+};
+</script>
+<script>
+/* ---------------------------------------------------- Fenetres modales */
+function ouvrir(titre, corps, boutons){
+  document.getElementById("modale").innerHTML = `
+    <div class="voile" data-action="fermer-voile">
+      <div class="modale" role="dialog" aria-modal="true">
+        <header><h3>${esc(titre)}</h3><button data-action="fermer" aria-label="Fermer">&times;</button></header>
+        <form id="formModale"><div class="corps">${corps}</div>
+        <footer>${boutons}</footer></form>
+      </div>
+    </div>`;
+  const p = document.querySelector("#formModale input, #formModale select, #formModale textarea");
+  if(p) p.focus();
+}
+const fermer = () => document.getElementById("modale").innerHTML = "";
+
+function formulaireOffre(o){
+  o = o || {secteur:"prive", statut:"A contacter", priorite:"P1", postes:1};
+  ouvrir(o.id ? "Modifier la structure" : "Nouvelle structure / offre", `
+    <div class="grille">
+      <div class="champ large"><label>Nom de la structure *</label>
+        <input type="text" name="structure" required value="${esc(o.structure||"")}" placeholder="Ex. Transports Camalon"></div>
+      <div class="champ"><label>Type d'activité</label>
+        <input type="text" name="type" value="${esc(o.type||"")}" placeholder="Ex. Transport de fret"></div>
+      <div class="champ"><label>Secteur</label>
+        <select name="secteur"><option value="prive"${o.secteur==="prive"?" selected":""}>Privé</option>
+          <option value="public"${o.secteur==="public"?" selected":""}>Public / santé</option></select></div>
+      <div class="champ"><label>Commune *</label>${selCommune("commune", o.commune)}</div>
+      <div class="champ"><label>Métier proposé *</label>
+        <select name="metier" required><option value="">— choisir —</option>${options(METIERS,o.metier,"id","nom")}</select></div>
+      <div class="champ"><label>Intitulé du poste</label>
+        <input type="text" name="poste" value="${esc(o.poste||"")}" placeholder="Ex. Préparateur de commandes"></div>
+      <div class="champ"><label>Nombre de postes</label>
+        <input type="number" name="postes" min="1" max="20" value="${esc(o.postes||1)}"></div>
+      <div class="champ"><label>Contact</label>
+        <input type="text" name="contact" value="${esc(o.contact||"")}" placeholder="Nom et fonction"></div>
+      <div class="champ"><label>Téléphone</label>
+        <input type="tel" name="tel" value="${esc(o.tel||"")}"></div>
+      <div class="champ"><label>Email</label>
+        <input type="email" name="email" value="${esc(o.email||"")}"></div>
+      <div class="champ"><label>Priorité</label>
+        <select name="priorite">${options(["P1","P2","P3"],o.priorite)}</select></div>
+      <div class="champ"><label>Statut</label>
+        <select name="statut">${options(STATUTS_OFFRE,o.statut)}</select></div>
+      <div class="champ large"><label>Notes</label>
+        <textarea name="notes" rows="3">${esc(o.notes||"")}</textarea></div>
+    </div>`,
+    `${o.id?`<button type="button" class="btn danger" data-action="supprimer-offre" data-id="${o.id}">Supprimer</button>`:""}
+     <button type="button" class="btn sec" data-action="fermer">Annuler</button>
+     <button type="submit" class="btn">Enregistrer</button>`);
+  document.getElementById("formModale").onsubmit = ev => {
+    ev.preventDefault();
+    const d = Object.fromEntries(new FormData(ev.target).entries());
+    if(!d.commune){ alert("Choisissez une commune."); return; }
+    if(o.id){ Object.assign(etat.offres.find(x=>x.id===o.id), d); }
+    else { etat.offres.unshift(Object.assign({id:uid(), source:"saisie"}, d)); }
+    sauver(); fermer(); rendre();
+  };
+}
+
+function formulaireCandidat(c){
+  c = c || {statut:"Nouveau", mobilite:"bus", metiers:[]};
+  ouvrir(c.id ? "Modifier le candidat" : "Nouveau candidat", `
+    <div class="grille">
+      <div class="champ"><label>Prénom *</label>
+        <input type="text" name="prenom" required value="${esc(c.prenom||"")}"></div>
+      <div class="champ"><label>Nom *</label>
+        <input type="text" name="nom" required value="${esc(c.nom||"")}"></div>
+      <div class="champ"><label>Date de naissance</label>
+        <input type="date" name="naissance" value="${esc(c.naissance||"")}">
+        <div class="aide">Le dispositif vise les 16-25 ans.</div></div>
+      <div class="champ"><label>Commune de résidence *</label>${selCommune("commune", c.commune)}</div>
+      <div class="champ"><label>Mobilité</label>
+        <select name="mobilite">${options(MOBILITES,c.mobilite,"id","nom")}</select>
+        <div class="aide">C'est le critère qui pèse le plus après le métier.</div></div>
+      <div class="champ"><label>Téléphone</label>
+        <input type="tel" name="tel" value="${esc(c.tel||"")}"></div>
+      <div class="champ"><label>Email</label>
+        <input type="email" name="email" value="${esc(c.email||"")}"></div>
+      <div class="champ"><label>Diplôme préparé</label>
+        <select name="diplome"><option value="">— choisir —</option>${options(DIPLOMES,c.diplome)}</select></div>
+      <div class="champ"><label>Disponible à partir du</label>
+        <input type="date" name="dispo" value="${esc(c.dispo||"")}"></div>
+      <div class="champ"><label>Statut</label>
+        <select name="statut">${options(STATUTS_CANDIDAT,c.statut)}</select></div>
+      <div class="champ large"><label>Métiers recherchés * (plusieurs possibles)</label>
+        <div class="cases">${METIERS.map(m=>`<label><input type="checkbox" name="metiers" value="${m.id}"
+          ${(c.metiers||[]).includes(m.id)?"checked":""}> ${esc(m.nom)}</label>`).join("")}</div></div>
+      <div class="champ large"><label>Notes</label>
+        <textarea name="notes" rows="3" placeholder="Motivation, contraintes horaires, permis en cours…">${esc(c.notes||"")}</textarea></div>
+    </div>`,
+    `${c.id?`<button type="button" class="btn danger" data-action="supprimer-candidat" data-id="${c.id}">Supprimer</button>`:""}
+     <button type="button" class="btn sec" data-action="fermer">Annuler</button>
+     <button type="submit" class="btn">Enregistrer</button>`);
+  document.getElementById("formModale").onsubmit = ev => {
+    ev.preventDefault();
+    const fd = new FormData(ev.target);
+    const d = Object.fromEntries(fd.entries());
+    d.metiers = fd.getAll("metiers");
+    if(!d.commune){ alert("Choisissez une commune de résidence."); return; }
+    if(d.metiers.length===0){ alert("Cochez au moins un métier recherché."); return; }
+    if(c.id){ Object.assign(etat.candidats.find(x=>x.id===c.id), d); }
+    else { etat.candidats.unshift(Object.assign({id:uid()}, d)); }
+    sauver(); fermer(); rendre();
+  };
+}
+
+function ficheOffre(id){
+  const o = etat.offres.find(x=>x.id===id); if(!o) return;
+  const cands = meilleursCandidats(o, 25).slice(0,8);
+  ouvrir(o.structure, `
+    <div class="grille" style="margin-bottom:16px">
+      <div><div class="sous">Type</div><b>${esc(o.type||"—")}</b></div>
+      <div><div class="sous">Commune</div><b>${esc(communeNom(o.commune))}</b></div>
+      <div><div class="sous">Métier</div><b>${esc(metierNom(o.metier))}</b></div>
+      <div><div class="sous">Statut</div>${etiqStatut(o.statut)}</div>
+      <div><div class="sous">Contact</div><b>${esc(o.contact||"à compléter")}</b></div>
+      <div><div class="sous">Téléphone</div><b>${esc(o.tel||"à compléter")}</b></div>
+      <div><div class="sous">Email</div><b>${esc(o.email||"à compléter")}</b></div>
+      <div><div class="sous">Priorité</div><b>${esc(o.priorite||"—")}</b></div>
+      ${o.notes?`<div class="large"><div class="sous">Notes</div>${esc(o.notes)}</div>`:""}
+    </div>
+    <h3 style="font-size:14px;color:var(--bleu);margin-bottom:8px">Candidats les plus adaptés</h3>
+    ${cands.length===0 ? `<div class="sous">Aucun candidat compatible pour l'instant.</div>` :
+      `<div class="lignes">${cands.map(r=>`
+        <div class="carte ligne" style="padding:10px 12px">
+          <div><div class="nom">${esc(r.candidat.prenom+" "+r.candidat.nom)}</div>
+            <div class="sous">${esc(communeNom(r.candidat.commune))} · ${esc(mobiliteNom(r.candidat.mobilite))}</div></div>
+          <div class="droite">${jauge(r.total)}
+            ${dejaLie(r.candidat.id,o.id)?`<span class="sous">déjà en relation</span>`:
+            `<button type="button" class="btn mini" data-action="creer-lien" data-cand="${r.candidat.id}" data-offre="${o.id}">Mettre en relation</button>`}
+          </div>
+        </div>`).join("")}</div>`}`,
+    `<button type="button" class="btn sec" data-action="modifier-offre" data-id="${o.id}">Modifier</button>
+     <button type="button" class="btn" data-action="fermer">Fermer</button>`);
+  document.getElementById("formModale").onsubmit = ev => ev.preventDefault();
+}
+
+function ficheCandidat(id){
+  const c = etat.candidats.find(x=>x.id===id); if(!c) return;
+  const offres = meilleuresOffres(c, 25).slice(0,8);
+  const a = age(c);
+  ouvrir(c.prenom+" "+c.nom, `
+    <div class="grille" style="margin-bottom:16px">
+      <div><div class="sous">Âge</div><b>${a===null?"—":a+" ans"}</b></div>
+      <div><div class="sous">Commune</div><b>${esc(communeNom(c.commune))}</b></div>
+      <div><div class="sous">Mobilité</div><b>${esc(mobiliteNom(c.mobilite))}</b></div>
+      <div><div class="sous">Diplôme préparé</div><b>${esc(c.diplome||"—")}</b></div>
+      <div><div class="sous">Disponible</div><b>${parJour(c.dispo)}</b></div>
+      <div><div class="sous">Statut</div>${etiqStatut(c.statut)}</div>
+      <div><div class="sous">Téléphone</div><b>${esc(c.tel||"—")}</b></div>
+      <div><div class="sous">Email</div><b>${esc(c.email||"—")}</b></div>
+      <div class="large"><div class="sous">Métiers recherchés</div>
+        ${(c.metiers||[]).map(m=>`<span class="etiq e-bleu">${esc(metierNom(m))}</span>`).join(" ")||"—"}</div>
+      ${c.notes?`<div class="large"><div class="sous">Notes</div>${esc(c.notes)}</div>`:""}
+    </div>
+    <h3 style="font-size:14px;color:var(--bleu);margin-bottom:8px">Offres les plus adaptées</h3>
+    ${offres.length===0 ? `<div class="sous">Aucune offre compatible pour l'instant.</div>` :
+      `<div class="lignes">${offres.map(r=>`
+        <div class="carte ligne" style="padding:10px 12px">
+          <div><div class="nom">${esc(r.offre.structure)}</div>
+            <div class="sous">${esc(metierNom(r.offre.metier))} · ${esc(communeNom(r.offre.commune))}</div></div>
+          <div class="droite">${jauge(r.total)}
+            ${dejaLie(c.id,r.offre.id)?`<span class="sous">déjà en relation</span>`:
+            `<button type="button" class="btn mini" data-action="creer-lien" data-cand="${c.id}" data-offre="${r.offre.id}">Mettre en relation</button>`}
+          </div>
+        </div>`).join("")}</div>`}`,
+    `<button type="button" class="btn sec" data-action="modifier-candidat" data-id="${c.id}">Modifier</button>
+     <button type="button" class="btn" data-action="fermer">Fermer</button>`);
+  document.getElementById("formModale").onsubmit = ev => ev.preventDefault();
+}
+
+/* ---------------------------------------------------- Import / export */
+function telecharger(nom, contenu, type){
+  const blob = new Blob([contenu], {type:type+";charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = nom; document.body.appendChild(a); a.click();
+  document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(url), 4000);
+}
+function versCSV(lignes, colonnes){
+  const ech = v => `"${String(v==null?"":v).replace(/"/g,'""')}"`;
+  return "﻿" + [colonnes.map(c=>ech(c.t)).join(";")]
+    .concat(lignes.map(l=>colonnes.map(c=>ech(c.v(l))).join(";"))).join("\r\n");
+}
+function exporterCSV(quoi){
+  const d = new Date().toISOString().slice(0,10);
+  if(quoi==="offres") telecharger(`offres_${d}.csv`, versCSV(etat.offres, [
+    {t:"Structure",v:o=>o.structure},{t:"Type",v:o=>o.type},{t:"Secteur",v:o=>o.secteur},
+    {t:"Commune",v:o=>communeNom(o.commune)},{t:"Métier",v:o=>metierNom(o.metier)},
+    {t:"Poste",v:o=>o.poste},{t:"Contact",v:o=>o.contact},{t:"Téléphone",v:o=>o.tel},
+    {t:"Email",v:o=>o.email},{t:"Priorité",v:o=>o.priorite},{t:"Statut",v:o=>o.statut},
+    {t:"Notes",v:o=>o.notes}]), "text/csv");
+  if(quoi==="candidats") telecharger(`candidats_${d}.csv`, versCSV(etat.candidats, [
+    {t:"Prénom",v:c=>c.prenom},{t:"Nom",v:c=>c.nom},{t:"Âge",v:c=>age(c)},
+    {t:"Commune",v:c=>communeNom(c.commune)},{t:"Mobilité",v:c=>mobiliteNom(c.mobilite)},
+    {t:"Métiers recherchés",v:c=>(c.metiers||[]).map(metierNom).join(" / ")},
+    {t:"Diplôme",v:c=>c.diplome},{t:"Disponible le",v:c=>c.dispo},
+    {t:"Téléphone",v:c=>c.tel},{t:"Email",v:c=>c.email},{t:"Statut",v:c=>c.statut},
+    {t:"Notes",v:c=>c.notes}]), "text/csv");
+  if(quoi==="liens") telecharger(`suivi_${d}.csv`, versCSV(etat.liens, [
+    {t:"Candidat",v:l=>{const c=etat.candidats.find(x=>x.id===l.candidatId);return c?c.prenom+" "+c.nom:"";}},
+    {t:"Structure",v:l=>{const o=etat.offres.find(x=>x.id===l.offreId);return o?o.structure:"";}},
+    {t:"Statut",v:l=>l.statut},{t:"Date",v:l=>l.date},{t:"Score",v:l=>l.score},
+    {t:"Notes",v:l=>l.notes}]), "text/csv");
+}
+function importerJSON(){
+  const inp = document.createElement("input");
+  inp.type = "file"; inp.accept = ".json,application/json";
+  inp.onchange = () => {
+    const f = inp.files[0]; if(!f) return;
+    const lect = new FileReader();
+    lect.onload = () => {
+      try{
+        const d = JSON.parse(lect.result);
+        if(!d || !Array.isArray(d.offres) || !Array.isArray(d.candidats))
+          throw new Error("structure inattendue");
+        if(!confirm(`Restaurer cette sauvegarde ?\n\n${d.offres.length} structures, `
+          + `${d.candidats.length} candidats, ${(d.liens||[]).length} mises en relation.\n\n`
+          + "Les données actuelles seront remplacées.")) return;
+        etat = {offres:d.offres, candidats:d.candidats, liens:d.liens||[], maj:null};
+        sauver(); rendre();
+        alert("Sauvegarde restaurée.");
+      }catch(e){ alert("Ce fichier n'est pas une sauvegarde valide.\n(" + e.message + ")"); }
+    };
+    lect.readAsText(f);
+  };
+  inp.click();
+}
+
+/* ---------------------------------------------------- Actions */
+const actions = {
+  "aller": el => { vueCourante = el.dataset.vue; rendre(); },
+  "nouvelle-offre": () => formulaireOffre(null),
+  "nouveau-candidat": () => formulaireCandidat(null),
+  "fiche-offre": el => ficheOffre(el.dataset.id),
+  "fiche-candidat": el => ficheCandidat(el.dataset.id),
+  "modifier-offre": el => formulaireOffre(etat.offres.find(x=>x.id===el.dataset.id)),
+  "modifier-candidat": el => formulaireCandidat(etat.candidats.find(x=>x.id===el.dataset.id)),
+  "fermer": fermer,
+  "fermer-voile": (el, ev) => { if(ev.target === el) fermer(); },
+  "supprimer-offre": el => {
+    if(!confirm("Supprimer définitivement cette structure et ses mises en relation ?")) return;
+    etat.offres = etat.offres.filter(x=>x.id!==el.dataset.id);
+    etat.liens = etat.liens.filter(l=>l.offreId!==el.dataset.id);
+    sauver(); fermer(); rendre();
+  },
+  "supprimer-candidat": el => {
+    if(!confirm("Supprimer définitivement ce candidat et ses mises en relation ?")) return;
+    etat.candidats = etat.candidats.filter(x=>x.id!==el.dataset.id);
+    etat.liens = etat.liens.filter(l=>l.candidatId!==el.dataset.id);
+    sauver(); fermer(); rendre();
+  },
+  "creer-lien": el => {
+    const cid = el.dataset.cand, oid = el.dataset.offre;
+    if(dejaLie(cid,oid)) return;
+    const c = etat.candidats.find(x=>x.id===cid), o = etat.offres.find(x=>x.id===oid);
+    etat.liens.unshift({id:uid(), candidatId:cid, offreId:oid, statut:"Proposé",
+                        date:aujourdhui(), score:scorer(c,o).total, notes:""});
+    if(o.statut==="A contacter"||o.statut==="Message laissé") o.statut = "Candidat proposé";
+    sauver(); fermer();
+    vueCourante = "suivi"; rendre();
+  },
+  "avancer-lien": el => {
+    const l = etat.liens.find(x=>x.id===el.dataset.id); if(!l) return;
+    const i = STATUTS_LIEN.indexOf(l.statut);
+    if(i < 0 || i >= STATUTS_LIEN.length-2){ l.statut = "Contrat signé"; }
+    else { l.statut = STATUTS_LIEN[i+1]; }
+    if(l.statut==="Contrat signé"){
+      const c = etat.candidats.find(x=>x.id===l.candidatId);
+      const o = etat.offres.find(x=>x.id===l.offreId);
+      if(c) c.statut = "Placé";
+      if(o) o.statut = "Contrat signé";
+    }
+    l.date = aujourdhui();
+    sauver(); rendre();
+  },
+  "supprimer-lien": el => {
+    if(!confirm("Retirer cette mise en relation du suivi ?")) return;
+    etat.liens = etat.liens.filter(x=>x.id!==el.dataset.id);
+    sauver(); rendre();
+  },
+  "export-json": () => telecharger(
+    `sauvegarde_alternance974_${aujourdhui()}.json`,
+    JSON.stringify({...etat, exporte:new Date().toISOString()}, null, 2), "application/json"),
+  "import-json": importerJSON,
+  "export-csv": el => exporterCSV(el.dataset.quoi),
+  "recharger-base": () => {
+    const ajout = DONNEES_INITIALES.filter(d =>
+      !etat.offres.some(o=>o.structure===d.structure && o.commune===d.commune));
+    etat.offres = etat.offres.concat(ajout.map(o=>Object.assign({}, o)));
+    sauver(); rendre();
+    alert(ajout.length + " structure(s) réintégrée(s).");
+  },
+  "tout-effacer": () => {
+    const mot = prompt("Cette action efface TOUTES vos données.\n\nTapez EFFACER pour confirmer :");
+    if((mot||"").trim().toUpperCase() !== "EFFACER") return;
+    localStorage.removeItem(CLE);
+    etat = {offres:DONNEES_INITIALES.map(o=>Object.assign({},o)), candidats:[], liens:[], maj:null};
+    sauver(); rendre();
+  },
+};
+
+document.addEventListener("click", ev => {
+  const el = ev.target.closest("[data-action]"); if(!el) return;
+  const f = actions[el.dataset.action]; if(!f) return;
+  f(el, ev);
+});
+document.addEventListener("change", ev => {
+  const el = ev.target.closest("[data-filtre]"); if(!el) return;
+  const [vue, champ] = el.dataset.filtre.split(".");
+  filtres[vue][champ] = el.value;
+  if(champ === "type") filtres[vue].cible = "";
+  rendre();
+});
+document.addEventListener("input", ev => {
+  const el = ev.target.closest("[data-filtre]"); if(!el || el.tagName !== "INPUT") return;
+  const [vue, champ] = el.dataset.filtre.split(".");
+  filtres[vue][champ] = el.value;
+  rendre();
+  const suivant = document.querySelector(`[data-filtre="${el.dataset.filtre}"]`);
+  if(suivant){ suivant.focus(); suivant.setSelectionRange(suivant.value.length, suivant.value.length); }
+});
+document.addEventListener("keydown", ev => { if(ev.key === "Escape") fermer(); });
+
+charger();
+rendre();
+</script>
+</body>
+</html>
