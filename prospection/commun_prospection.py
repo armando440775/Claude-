@@ -68,6 +68,61 @@ def lien_annuaire(nom, commune):
             + quote(terme_recherche(nom, commune)))
 
 
+# ------------------------------------------------- Tables de reference INSEE
+# Partagees par completer_via_annuaire.py et construire_fichier_sirene.py.
+EFFECTIFS = {
+    "NN": "Non renseigne (INSEE)", "00": "0 salarie", "01": "1 ou 2 salaries",
+    "02": "3 a 5 salaries", "03": "6 a 9 salaries", "11": "10 a 19 salaries",
+    "12": "20 a 49 salaries", "21": "50 a 99 salaries", "22": "100 a 199 salaries",
+    "31": "200 a 249 salaries", "32": "250 a 499 salaries", "41": "500 a 999 salaries",
+    "42": "1000 a 1999 salaries", "51": "2000 a 4999 salaries",
+    "52": "5000 a 9999 salaries", "53": "10000 salaries et plus",
+}
+
+NAF = {
+    "52.10A": "Entreposage et stockage frigorifique",
+    "52.10B": "Entreposage et stockage non frigorifique",
+    "52.24A": "Manutention portuaire",
+    "52.24B": "Manutention non portuaire",
+    "52.29A": "Messagerie, fret express",
+    "52.29B": "Affretement et organisation des transports",
+    "49.41A": "Transports routiers de fret interurbains",
+    "49.41B": "Transports routiers de fret de proximite",
+    "49.41C": "Location de camions avec chauffeur",
+    "49.42Z": "Services de demenagement",
+    "53.20Z": "Autres activites de poste et de courrier",
+    "46.39A": "Commerce de gros de produits surgeles",
+    "46.39B": "Commerce de gros alimentaire non specialise",
+    "46.31Z": "Commerce de gros de fruits et legumes",
+    "46.46Z": "Commerce de gros de produits pharmaceutiques",
+    "46.73A": "Commerce de gros de bois et de materiaux de construction",
+    "46.90Z": "Commerce de gros non specialise",
+    "47.11D": "Supermarches",
+    "47.11F": "Hypermarches",
+    "47.52B": "Commerce de detail de materiaux de construction",
+    "10.81Z": "Fabrication de sucre",
+    # --- secteur public, scolaire et sanitaire
+    "84.11Z": "Administration publique generale",
+    "84.25C": "Services de secours et de lutte contre l'incendie",
+    "85.20Z": "Enseignement primaire",
+    "85.31Z": "Enseignement secondaire general",
+    "85.32Z": "Enseignement secondaire technique ou professionnel",
+    "85.42Z": "Enseignement superieur",
+    "86.10Z": "Activites hospitalieres",
+    "86.90E": "Autres activites para-medicales (dont dialyse)",
+    "87.10A": "Hebergement medicalise pour personnes agees",
+    "87.10B": "Hebergement medicalise pour enfants handicapes",
+    "87.30A": "Hebergement social pour personnes agees",
+    "87.30B": "Hebergement social pour handicapes physiques",
+    "88.10A": "Aide a domicile",
+    "88.10C": "Aide par le travail (ESAT)",
+    "88.99B": "Action sociale sans hebergement n.c.a.",
+    "56.29A": "Restauration collective sous contrat",
+    "38.11Z": "Collecte des dechets non dangereux",
+    "38.21Z": "Traitement et elimination des dechets non dangereux",
+    "35.13Z": "Distribution d'electricite",
+}
+
 # ---------------------------------------------------------------- Colonnes
 def colonnes(libelle_segment="Segment logistique"):
     """Colonnes du classeur. Seul l'intitule de la colonne C change d'un fichier

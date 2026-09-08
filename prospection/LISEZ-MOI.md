@@ -20,6 +20,7 @@ Double-cliquez, c'est tout. Une seule structure figure dans les deux fichiers �
 | Fichier | À quoi ça sert |
 |---|---|
 | `completer_via_annuaire.py` | Remplit tout seul SIRET / code APE / effectif / dirigeant depuis l'INSEE. **Fonctionne sur les deux classeurs.** |
+| `construire_fichier_sirene.py` | Construit un **troisième fichier, exhaustif**, directement depuis la base SIRENE de l'INSEE (voir ci-dessous). |
 | `generer_fichier_prospection.py` | Régénère le classeur « privé » à zéro. |
 | `generer_fichier_public_sante.py` | Régénère le classeur « public & santé » à zéro. |
 | `commun_prospection.py` | Briques partagées par les deux générateurs (charte, colonnes, mise en page). Ne s'exécute pas seul. |
@@ -67,6 +68,60 @@ objections) est dans l'onglet 09.
 
 Attention : montants, quotas et dates changent chaque année. Revérifiez sur cnfpt.fr avant
 d'annoncer un chiffre.
+
+## Le fichier exhaustif SIRENE
+
+Les deux fichiers ci-dessus sont **qualitatifs** : des structures repérées une par une, avec des
+notes de terrain et un angle d'attaque pour chacune. Ils ne prétendent pas à l'exhaustivité.
+
+`construire_fichier_sirene.py` fait l'inverse : il balaie **tous les établissements actifs** du
+périmètre dont le code APE relève de la logistique, et sort un fichier où chaque ligne a déjà son
+SIRET, son code APE et son effectif officiels — fiabilité « Vérifié INSEE » sur toute la colonne.
+
+```
+cd <le dossier prospection>
+python3 construire_fichier_sirene.py                  # bassin Nord-Est, cœur logistique
+python3 construire_fichier_sirene.py --champ large    # + négoce et grande distribution
+python3 construire_fichier_sirene.py --perimetre 974  # toute l'île, regroupée en 4 zones
+```
+
+Comptez une minute d'exécution pour le bassin : le script interroge l'API officielle code APE par
+code APE et commune par commune.
+
+**Si le réseau de votre CFA bloque l'API**, la même extraction se fait hors ligne à partir des
+fichiers Stock SIRENE téléchargés sur [data.gouv.fr](https://www.data.gouv.fr) (« base SIRENE des
+entreprises » → *Stock Établissement* et *Stock Unité Légale*, à décompresser) :
+
+```
+python3 construire_fichier_sirene.py --source stock \
+    --etablissements StockEtablissement_utf8.csv \
+    --unites StockUniteLegale_utf8.csv
+```
+
+### Comment l'exploiter
+
+- **Les priorités sont calculées sur l'effectif réel** : P1 = 10 salariés ou plus sur un code APE
+  cœur de métier, P2 = 1 à 9 salariés ou effectif non renseigné, P3 = 0 salarié déclaré (souvent
+  une société sans personnel : à ne travailler qu'en dernier).
+- **Les doublons avec votre fichier qualitatif sont signalés** en colonne Notes, pour que vous
+  repreniez vos notes d'appel existantes au lieu de repartir de zéro.
+- **Un groupe apparaît autant de fois qu'il a d'établissements** dans le périmètre. La colonne
+  Notes précise siège ou établissement secondaire : un seul appel au siège suffit.
+- **SIRENE ne contient ni téléphone ni email.** Ces deux colonnes restent à compléter à la main,
+  comme dans les autres fichiers.
+- L'onglet « 09 Paramètres » garde la trace exacte de l'extraction : date, codes APE interrogés,
+  périmètre, et la commande à relancer pour l'actualiser.
+
+### Pourquoi SIRENE et pas societe.com
+
+SIRENE est la base officielle de l'INSEE : gratuite, exhaustive, mise à jour en continu et
+librement réutilisable. Societe.com **republie ces mêmes données**, en y ajoutant des bilans ; ses
+conditions d'utilisation interdisent l'extraction automatisée, et sur les champs qui vous servent à
+prospecter (raison sociale, adresse, APE, effectif, dirigeant) il n'apporte rien de plus.
+
+Si un jour vous avez besoin du **chiffre d'affaires** d'une entreprise — SIRENE ne le contient pas —
+la source officielle et gratuite est le registre national des entreprises de l'INPI
+(data.inpi.fr), qui publie les comptes annuels déposés.
 
 ## Remplir automatiquement les SIRET, APE, effectifs et dirigeants
 
