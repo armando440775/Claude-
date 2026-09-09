@@ -23,6 +23,10 @@ Double-cliquez, c'est tout. Une seule structure figure dans les deux fichiers �
 | `generer_fichier_prospection.py` | Régénère le classeur « privé » à zéro. |
 | `generer_fichier_public_sante.py` | Régénère le classeur « public & santé » à zéro. |
 | `commun_prospection.py` | Briques partagées par les deux générateurs (charte, colonnes, mise en page). Ne s'exécute pas seul. |
+| `Modeles_Email_Prospection.xlsx` | **Le système d'email.** Tous les modèles d'email prêts à l'emploi (entreprises, secteur public, candidats). |
+| `generer_emails_personnalises.py` | Génère un brouillon d'email personnalisé par entreprise à partir d'un des deux classeurs. |
+| `modeles_email.py` | Vos coordonnées + le texte de tous les modèles. **C'est le fichier à personnaliser.** |
+| `generer_modeles_email.py` | Régénère `Modeles_Email_Prospection.xlsx` à partir de `modeles_email.py`. |
 
 ⚠️ Les scripts `generer_*` **écrasent** le classeur et donc votre suivi de prospection.
 Ne les lancez pas une fois que vous avez commencé à remplir les colonnes « Statut » et « Notes ».
@@ -138,6 +142,60 @@ La colonne **« Fiabilité donnée »** vous dit à quoi vous fier :
 votre crédibilité dès la première phrase. Quand l'information n'était pas vérifiable, la case
 porte « A VERIFIER » et la colonne S vous donne un lien pré-rempli vers l'Annuaire des
 Entreprises pour la compléter en deux clics.
+
+## Le système d'email — relancer sans tout retaper
+
+Une fois les téléphones et emails collectés (voir ci-dessus), `Modeles_Email_Prospection.xlsx`
+contient un modèle prêt à l'emploi pour chaque étape de la prospection : premier contact,
+relance sans réponse, confirmation de rendez-vous, envoi d'un profil candidat, remerciement
+après signature, etc. — un onglet pour le privé, un pour le secteur public (avec le rappel
+de la campagne CNFPT), un pour les candidats de 16 à 25 ans (réponse à candidature, invitation
+à une réunion d'information, mise en relation avec une entreprise…).
+
+**Avant le premier envoi — une seule fois :** ouvrez `modeles_email.py` et complétez la
+section `CONFIG` en haut du fichier (nom du CFA, votre nom, téléphone, email). Ces
+informations remplissent automatiquement la signature de chaque email généré.
+
+**Pour générer des brouillons personnalisés** à partir de votre fichier de prospection :
+
+```
+cd <le dossier prospection>
+python3 generer_emails_personnalises.py --lister                       # voir tous les modèles
+python3 generer_emails_personnalises.py --categorie entreprise_prive \
+    --modele PREMIER_CONTACT --statut "A contacter"
+```
+
+Le script parcourt le classeur choisi (par défaut le fichier « privé » ; passez le nom du
+fichier « public & santé » en premier argument pour l'autre classeur), ne retient que les
+lignes où un **email a été renseigné** (colonne « Email contact »), et écrit :
+
+- un fichier **`.eml`** par entreprise dans `emails_generes/<catégorie>/<modèle>/` — un
+  double-clic l'ouvre comme brouillon dans Outlook, Mail ou Thunderbird, déjà rempli
+  (destinataire, objet, texte), prêt à relire puis à envoyer à la main ;
+- **`fusion_emails.csv`** — les mêmes emails en tableau, pour un outil de publipostage
+  (Gmail, Outlook) si vous préférez cette méthode ;
+- **`journal_emails.csv`** — la liste des lignes ignorées et pourquoi (pas d'email connu,
+  statut hors filtre).
+
+**Rien n'est envoyé automatiquement.** Le script ne se connecte à aucune boîte mail : il
+prépare des brouillons, vous gardez la main sur chaque envoi.
+
+L'option `--statut` filtre sur la colonne « Statut prospection » (ex. `"A contacter"`,
+`"RDV pris"`, ou plusieurs séparés par une virgule) pour n'adresser le bon modèle qu'aux
+bonnes lignes — l'onglet « Quand l'utiliser » de `Modeles_Email_Prospection.xlsx` indique
+le statut adapté à chaque modèle.
+
+Pour changer le texte d'un modèle : modifiez-le dans `modeles_email.py` (c'est le texte
+réellement utilisé par la fusion), puis relancez `generer_modeles_email.py` pour que le
+classeur de référence reflète le changement.
+
+### Rappel RGPD / CNIL
+
+La prospection professionnelle par email vers une adresse professionnelle est autorisée en
+France sans accord préalable dès lors qu'elle concerne l'activité du destinataire, à condition
+d'identifier clairement l'expéditeur et d'offrir un moyen simple de s'y opposer. C'est le rôle
+de la mention « Si vous ne souhaitez plus recevoir de proposition de notre part, répondez STOP »
+incluse dans la signature des emails entreprises et secteur public — ne la retirez pas.
 
 ## La colonne la plus utile : l'effectif
 
